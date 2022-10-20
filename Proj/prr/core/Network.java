@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.io.IOException;
 
 import prr.app.exception.DuplicateClientKeyException;
+import prr.app.exception.DuplicateTerminalKeyException;
 import prr.app.exception.UnknownClientKeyException;
 import prr.core.exception.UnrecognizedEntryException;
 import java.util.*;
@@ -53,7 +54,7 @@ public class Network implements Serializable {
         return new ArrayList<Client>(_clientSet);
   }
 
-  public void registerClient(String key, String name, int taxNum) throws DuplicateClientKeyException{
+  public void registerClient(String key, String name, int taxNum) throws DuplicateClientKeyException {
     if(findClient(key) != null){
       throw new DuplicateClientKeyException(key);
     }
@@ -61,12 +62,30 @@ public class Network implements Serializable {
     _clientSet.add(newClient);
   }
 
-  public void registerBasicTerminal(String id){
+  public Terminal findTerminal(int id) {
+    Iterator<Terminal> it = _terminalSet.iterator();
+    Terminal terminal;
+    while(it.hasNext()) {
+      terminal = it.next();
+      if(id == terminal.getId()) {
+        return terminal;
+      }
+    }
+    return null;
+  }
+
+  public void registerBasicTerminal(int id) throws DuplicateTerminalKeyException {
+    if(findTerminal(id)!=null) {
+      throw new DuplicateTerminalKeyException(Integer.toString(id));
+    }
     Terminal newTerminal = new BasicTerminal(id);
     _terminalSet.add(newTerminal);
   }
 
-  public void registerFancyTerminal(String id){
+  public void registerFancyTerminal(int id) throws DuplicateTerminalKeyException {
+    if(findTerminal(id)!=null) {
+      throw new DuplicateTerminalKeyException(Integer.toString(id));
+    }
     Terminal newTerminal = new FancyTerminal(id);
     _terminalSet.add(newTerminal);
   }

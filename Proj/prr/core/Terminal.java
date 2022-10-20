@@ -19,7 +19,7 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
 
   /** Serial number for serialization. */
   private static final long serialVersionUID = 202208091753L;
-  private String _id;
+  private int _id;
   //private String _mode;
   private double _debt;
   private double _payments;
@@ -35,7 +35,7 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
   // FIXME define contructor(s)
   // FIXME define methods
   
-  public Terminal(String id){
+  public Terminal(int id){
     _id = id;
     _debt = 0;
     _payments = 0;
@@ -48,6 +48,10 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
 
   public TerminalMode getMode(){
     return _mode;
+  }
+
+  public int getId() {
+    return _id;
   }
 
   public boolean associateClient(Client c){
@@ -173,7 +177,7 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
 
     while(it.hasNext()){
       it.next();
-      it.notificateClient();
+      //it.notificateClient();
     }
     _attemptedCommunications.clear();
   }

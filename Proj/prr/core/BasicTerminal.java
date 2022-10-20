@@ -6,7 +6,7 @@ package prr.core;
 
 public class BasicTerminal extends Terminal{
     //construtor do terminal basico
-    public BasicTerminal(String id) {
+    public BasicTerminal(int id) {
         super(id);
     }
 
