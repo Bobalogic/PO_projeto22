@@ -49,8 +49,8 @@ public class Network implements Serializable {
     return client.toString();
   }
 
-  public Collection<String> showAllClient() {
-    Ite
+  public Collection<Client> getAllClient() {
+        return new ArrayList<Client>(_clientSet);
   }
 
   public void registerClient(String key, String name, int taxNum) throws DuplicateClientKeyException{

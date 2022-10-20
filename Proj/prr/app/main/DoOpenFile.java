@@ -11,7 +11,6 @@ import pt.tecnico.uilib.menus.CommandException;
  * Command to open a file.
  */
 class DoOpenFile extends Command<NetworkManager> {
-
   DoOpenFile(NetworkManager receiver) {
     super(Label.OPEN_FILE, receiver);
     //FIXME add command fields
@@ -19,12 +18,11 @@ class DoOpenFile extends Command<NetworkManager> {
   
   @Override
   protected final void execute() throws CommandException {
-    /*
       try {
       //FIXME implement command
+      _receiver.
       } catch (UnavailableFileException e) {
         throw new FileOpenFailedException(e);
       }
-    */  
   }
 }

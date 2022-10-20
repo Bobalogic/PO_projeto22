@@ -42,9 +42,7 @@ public class Client {
         _recieveNotifications = false;
     }
 
-    public String getKey(){
-        return _key;
-    }
+    public String getKey(){return _key;}
 
     public String getName(){
         return _name;
