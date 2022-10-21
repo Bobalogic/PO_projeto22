@@ -9,6 +9,7 @@ import prr.app.exception.UnknownClientKeyException;
 import prr.app.exception.UnknownTerminalKeyException;
 import prr.core.exception.UnrecognizedEntryException;
 import java.util.*;
+import java.util.HashMap;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
@@ -19,32 +20,19 @@ public class Network implements Serializable {
 
   /** Serial number for serialization. */
   private static final long serialVersionUID = 202208091753L;
-  private Set<Client> _clientSet;
-  private Set<Terminal> _terminalSet;
+  private Map<String, Client> _clientSet;
+  private Map<String, Terminal> _terminalSet;
   
   public Network(){
-    _clientSet = new HashSet<>();
-    _terminalSet = new HashSet<>();
+    _clientSet = new HashMap<String, Client>();
+    _terminalSet = new HashMap<String, Terminal>();
   }
 
-  public Client findClient(String id){
-    Iterator<Client> it = _clientSet.iterator();
-    Client client;
-    while(it.hasNext()) {
-      client = it.next();
-      if(id == client.getName()) {
-        return client;
-      }
-    }
-    return null;
-  }
-
-  public Client getClient(String key) throws UnknownClientKeyException {
-    Client c = findClient(key);
-    if(c == null) {
+  public Client getClient(String key) throws UnknownClientKeyException{
+    Client temp = _clientSet.get(key);
+    if (temp == null)
       throw new UnknownClientKeyException(key);
-    }
-    return c;
+    return temp;
   }
 
   public String showClient(Client client) {
@@ -52,47 +40,34 @@ public class Network implements Serializable {
   }
 
   public Collection<Client> getAllClient() {
-        return new ArrayList<Client>(_clientSet);
+        return new ArrayList<Client>(_clientSet.values());
   }
 
   public void registerClient(String key, String name, int taxNum) throws DuplicateClientKeyException {
-    if(findClient(key) != null){
+    if(_clientSet.containsKey(key)){
       throw new DuplicateClientKeyException(key);
     }
     Client newClient = new Client(key, name, taxNum);
-    _clientSet.add(newClient);
-  }
-
-  public Terminal findTerminal(String id) {
-    Iterator<Terminal> it = _terminalSet.iterator();
-    Terminal terminal;
-    while(it.hasNext()) {
-      terminal = it.next();
-      if(id == terminal.getId()) {
-        return terminal;
-      }
-    }
-    return null;
+    _clientSet.put(key, newClient);
   }
 
   public Terminal getTerminal(String id) throws UnknownTerminalKeyException {
-    Terminal t = findTerminal(id);
-    if(t == null) {
+    Terminal temp = _terminalSet.get(id);
+    if (temp == null)
       throw new UnknownTerminalKeyException(id);
-    }
-    return t;
+    return temp;
   }
 
   public Collection<Terminal> getAllTerminal() {
-    return new ArrayList<Terminal>(_terminalSet);
+    return new ArrayList<Terminal>(_terminalSet.values());
   }
 
   public Terminal registerTerminal(String id, String type) throws DuplicateTerminalKeyException{
-    if(findTerminal(id) != null) {
+    if(_terminalSet.containsKey(id)) {
       throw new DuplicateTerminalKeyException(id);
     }
     Terminal terminal = new Terminal(id, type);
-    _terminalSet.add(terminal);
+    _terminalSet.put(id, terminal);
     return terminal;
   }
 

@@ -1,0 +1,34 @@
+*** tests/A-07-04-M-ok.out	2022-10-02 13:28:03.000000000 +0100
+--- tests/A-07-04-M-ok.outhyp	2022-10-21 18:09:53.140145686 +0100
+***************
+*** 6,33 ****
+  5 - Menu de consultas
+  6 - Ver saldo global
+  0 - Sair
+- Escolha uma opção: GESTÃO DE TERMINAIS
+- 1 - Mostrar todos os terminais
+- 2 - Registar terminal
+- 3 - Operações de terminal
+- 0 - Sair
+- Escolha uma opção: Número do terminal: Tipo de terminal (BASIC ou FANCY): Identificador do cliente: Registar terminal: Operação inválida: O cliente 'cli' não existe.
+- GESTÃO DE TERMINAIS
+- 1 - Mostrar todos os terminais
+- 2 - Registar terminal
+- 3 - Operações de terminal
+- 0 - Sair
+- Escolha uma opção: GESTÃO DE TERMINAIS
+- 1 - Mostrar todos os terminais
+- 2 - Registar terminal
+- 3 - Operações de terminal
+- 0 - Sair
+- Escolha uma opção: MENU PRINCIPAL
+- 1 - Abrir
+- 2 - Guardar
+- 3 - Gestão de clientes
+- 4 - Gestão de terminais
+- 5 - Menu de consultas
+- 6 - Ver saldo global
+- 0 - Sair
+  Escolha uma opção: 
+\ No newline at end of file
+--- 6,9 ----
