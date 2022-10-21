@@ -8,9 +8,11 @@ import java.io.BufferedReader;
 import java.util.Collection;
 import java.util.ArrayList;
 
+import prr.app.exception.DuplicateClientKeyException;
+import prr.app.exception.DuplicateTerminalKeyException;
+import prr.app.exception.UnknownTerminalKeyException;
 import prr.core.exception.UnrecognizedEntryException;
-import prr.core.exception.UnknownIdentifierException;
-// import more exception core classes if needed
+// import more exception core classes if needed (UnknownIdentifierException)
 
 /* 
  * A concretização desta classe depende da funcionalidade suportada pelas entidades do core:
@@ -49,7 +51,7 @@ public class Parser {
   }
 
   private void checkComponentsLength(String[] components, int expectedSize, String line) throws UnrecognizedEntryException {
-    if (component.length != expectedSize)
+    if (components.length != expectedSize)
       throw new UnrecognizedEntryException("Invalid number of fields in line: " + line);
   }
   
@@ -62,7 +64,7 @@ public class Parser {
       _network.registerClient(components[1], components[2], taxNumber);
     } catch (NumberFormatException nfe) {
       throw new UnrecognizedEntryException("Invalid number in line " + line, nfe);
-    } catch (OtherException e) {
+    } catch (DuplicateClientKeyException e) {
       throw new UnrecognizedEntryException("Invalid specification in line: " + line, e);
     }
   }
@@ -72,16 +74,16 @@ public class Parser {
     checkComponentsLength(components, 4, line);
 
     try {
-      Terminal terminal = _network.registerTerminal(components[0], components[1], components[2]);
+      Terminal terminal = _network.registerTerminal(components[0], components[1]);
       switch(components[3]) {
         case "SILENCE" -> terminal.setOnSilent();
-        case "OFF" -> terminal->turnOff();
+        case "OFF" -> terminal.turnOff();
         default -> {
          if (!components[3].equals("ON"))
            throw new UnrecognizedEntryException("Invalid specification in line: " + line);
         } 
       }
-    } catch (SomeOtherException e) {
+    } catch (DuplicateTerminalKeyException e) {
       throw new UnrecognizedEntryException("Invalid specification: " + line, e);
     }
   }
@@ -96,7 +98,7 @@ public class Parser {
       
       for (String friend : friends)
         _network.addFriend(terminal, friend);
-    } catch (OtherException e) {
+    } catch (UnknownTerminalKeyException e) {
       throw new UnrecognizedEntryException("Some message error in line:  " + line, e);
     }
   }

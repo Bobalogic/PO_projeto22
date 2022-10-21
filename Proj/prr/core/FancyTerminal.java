@@ -2,7 +2,7 @@ package prr.core;
 
 public class FancyTerminal extends Terminal{
 
-    public FancyTerminal(int id) {
+    public FancyTerminal(String id) {
         super(id);
     }
 

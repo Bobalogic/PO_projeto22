@@ -6,6 +6,7 @@ import java.io.IOException;
 import prr.app.exception.DuplicateClientKeyException;
 import prr.app.exception.DuplicateTerminalKeyException;
 import prr.app.exception.UnknownClientKeyException;
+import prr.app.exception.UnknownTerminalKeyException;
 import prr.core.exception.UnrecognizedEntryException;
 import java.util.*;
 
@@ -62,7 +63,7 @@ public class Network implements Serializable {
     _clientSet.add(newClient);
   }
 
-  public Terminal findTerminal(int id) {
+  public Terminal findTerminal(String id) {
     Iterator<Terminal> it = _terminalSet.iterator();
     Terminal terminal;
     while(it.hasNext()) {
@@ -74,20 +75,50 @@ public class Network implements Serializable {
     return null;
   }
 
-  public void registerBasicTerminal(int id) throws DuplicateTerminalKeyException {
+  public Terminal getTerminal(String id) throws UnknownTerminalKeyException {
+    Terminal t = findTerminal(id);
+    if(t == null) {
+      throw new UnknownTerminalKeyException(id);
+    }
+    return t;
+  }
+
+  public Terminal registerTerminal(String id, String type) throws DuplicateTerminalKeyException{
+    if(type == "FANCY") {
+      registerFancyTerminal(id);
+    }
+    registerBasicTerminal(id);
+    Terminal t = null;
+    try{
+      t =  getTerminal(id);
+    }catch(UnknownTerminalKeyException exe) {
+      exe = new UnknownTerminalKeyException(id);
+    }
+    return t;
+  }
+
+  public void registerBasicTerminal(String id) throws DuplicateTerminalKeyException {
     if(findTerminal(id)!=null) {
-      throw new DuplicateTerminalKeyException(Integer.toString(id));
+      throw new DuplicateTerminalKeyException(id);
     }
     Terminal newTerminal = new BasicTerminal(id);
     _terminalSet.add(newTerminal);
   }
 
-  public void registerFancyTerminal(int id) throws DuplicateTerminalKeyException {
+  public void registerFancyTerminal(String id) throws DuplicateTerminalKeyException {
     if(findTerminal(id)!=null) {
-      throw new DuplicateTerminalKeyException(Integer.toString(id));
+      throw new DuplicateTerminalKeyException(id);
     }
     Terminal newTerminal = new FancyTerminal(id);
     _terminalSet.add(newTerminal);
+  }
+
+  public void addFriend(String id1, String id2) throws UnknownTerminalKeyException {
+    Terminal terminal = getTerminal(id1);
+    Terminal friend = getTerminal(id2);
+    if(!terminal.isFriendsWith(friend)){
+      terminal.makeFriend(friend);
+    }
   }
 
   public boolean turnOffTerminal(Terminal terminal){

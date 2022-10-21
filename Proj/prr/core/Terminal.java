@@ -19,7 +19,7 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
 
   /** Serial number for serialization. */
   private static final long serialVersionUID = 202208091753L;
-  private int _id;
+  private String _id;
   //private String _mode;
   private double _debt;
   private double _payments;
@@ -35,7 +35,7 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
   // FIXME define contructor(s)
   // FIXME define methods
   
-  public Terminal(int id){
+  public Terminal(String id){
     _id = id;
     _debt = 0;
     _payments = 0;
@@ -50,7 +50,7 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
     return _mode;
   }
 
-  public int getId() {
+  public String getId() {
     return _id;
   }
 
@@ -159,6 +159,15 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
 
   public void removeFriend(Terminal other){
     _friends.remove(other);
+  }
+
+  public boolean isFriendsWith(Terminal t) {
+    for(Terminal friend: _friends) {
+      if(_id == friend.getId()) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /*
