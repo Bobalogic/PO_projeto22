@@ -20,7 +20,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   private TerminalMode _mode;
   private Communication _from;
   private Communication _to;
-  private Client _client;
+  private String _clientID;
   private Collection<Terminal> _friends;
   private Collection<Terminal> _attemptedCommunications;
   //adicionar atributo client?
@@ -29,7 +29,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   // FIXME define contructor(s)
   // FIXME define methods
   
-  public Terminal(String id, String type){
+  public Terminal(String id, String type, String idClient){
     _id = id;
     _type = type;
     _debt = 0;
@@ -37,6 +37,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     _mode = TerminalMode.IDLE;
     _from = null;
     _to = null;
+    _clientID = idClient;
     _friends = new HashSet<>();
     _attemptedCommunications = new LinkedList<>();
   }
@@ -55,7 +56,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
 
   @Override
   public String toString() {
-    return _type + "|" + _id + "|" + _client + "|" + _mode + "|" + _payments + "|"
+    return _type + "|" + _id + "|" + _clientID + "|" + _mode + "|" + _payments + "|"
             + _debt + "|" + showFriends();
   }
 
@@ -69,14 +70,14 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     return s;
   }
 
-  public boolean associateClient(Client c){
+  /*public boolean associateClient(Client c){
     //fazer exeptions para quando tem la um null, ou quando recebe um null
     if(_client != null || c == null){
       return false;
     }
     _client = c;
     return true;
-  }
+  }*/
 
   /**
    * Checks if this terminal can end the current interactive communication.
@@ -212,17 +213,17 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
 
   /*
    * regists the terminal which tried to start a communication with this Terminal
-   */
+
   public void registAttemptedComm(Terminal from){
     if(from.canNotificateClient()){
       _attemptedCommunications.add(from);
     }
   }
 
-  /*
+
    * checks if client has enabled Notifications
-   */
+
   public boolean canNotificateClient(){
     return _client.booleanNotifications();
-  }
+  }*/
 }
