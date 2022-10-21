@@ -21,5 +21,6 @@ class DoShowAllClients extends Command<Network> {
     for (Client client : _receiver.getAllClient()) {
       _display.addLine(client.toString());
     }
+    _display.display();
   }
 }
