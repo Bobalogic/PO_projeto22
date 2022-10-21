@@ -1,0 +1,10 @@
+Erro a colocar a entrada de dados: java.io.FileNotFoundException: test.in (No such file or directory)
+MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: 
