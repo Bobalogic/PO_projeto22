@@ -3,6 +3,7 @@ package prr.app.terminals;
 import prr.core.Network;
 import prr.core.Terminal;
 import prr.app.exception.UnknownTerminalKeyException;
+import prr.app.terminal.Menu;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 //FIXME add mode import if needed
@@ -28,6 +29,6 @@ class DoOpenMenuTerminalConsole extends Command<Network> {
     }catch(UnknownTerminalKeyException exe) {
       exe = new UnknownTerminalKeyException(stringField("key"));
     }
-    (new prr.app.terminals.Menu(_receiver, terminal)).open();
+    (new Menu(_receiver, terminal)).open();
   }
 }

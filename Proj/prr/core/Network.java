@@ -83,34 +83,17 @@ public class Network implements Serializable {
     return t;
   }
 
+  public Collection<Terminal> getAllTerminal() {
+    return new ArrayList<Terminal>(_terminalSet);
+  }
+
   public Terminal registerTerminal(String id, String type) throws DuplicateTerminalKeyException{
-    if(type == "FANCY") {
-      registerFancyTerminal(id);
-    }
-    registerBasicTerminal(id);
-    Terminal t = null;
-    try{
-      t =  getTerminal(id);
-    }catch(UnknownTerminalKeyException exe) {
-      exe = new UnknownTerminalKeyException(id);
-    }
-    return t;
-  }
-
-  public void registerBasicTerminal(String id) throws DuplicateTerminalKeyException {
-    if(findTerminal(id)!=null) {
+    if(findTerminal(id) != null) {
       throw new DuplicateTerminalKeyException(id);
     }
-    Terminal newTerminal = new BasicTerminal(id);
-    _terminalSet.add(newTerminal);
-  }
-
-  public void registerFancyTerminal(String id) throws DuplicateTerminalKeyException {
-    if(findTerminal(id)!=null) {
-      throw new DuplicateTerminalKeyException(id);
-    }
-    Terminal newTerminal = new FancyTerminal(id);
-    _terminalSet.add(newTerminal);
+    Terminal terminal = new Terminal(id, type);
+    _terminalSet.add(terminal);
+    return terminal;
   }
 
   public void addFriend(String id1, String id2) throws UnknownTerminalKeyException {
@@ -119,6 +102,10 @@ public class Network implements Serializable {
     if(!terminal.isFriendsWith(friend)){
       terminal.makeFriend(friend);
     }
+  }
+
+  public String showTerminal(Terminal t) {
+    return t.toString();
   }
 
   public boolean turnOffTerminal(Terminal terminal){
@@ -134,6 +121,7 @@ public class Network implements Serializable {
     }
     return false;
   }
+
 
   /**
    * Read text input file and create corresponding domain entities.

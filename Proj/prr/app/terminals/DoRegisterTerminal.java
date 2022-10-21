@@ -24,19 +24,10 @@ class DoRegisterTerminal extends Command<Network> {
 
   @Override
   protected final void execute() throws CommandException {
-    if(stringField("type") == "FANCY") {
-      try {
-        _receiver.registerFancyTerminal(stringField("id"));
-      }catch (DuplicateTerminalKeyException exe) {
-        exe = new DuplicateTerminalKeyException(Integer.toString(integerField("id")));
-      }
-    }
-    else if(stringField("type") == "NORMAL") {
-      try {
-        _receiver.registerBasicTerminal(stringField("id"));
-      }catch (DuplicateTerminalKeyException exe) {
-        exe = new DuplicateTerminalKeyException(Integer.toString(integerField("id")));
-      }
+    try {
+      _receiver.registerTerminal(stringField("id"), stringField("type"));
+    }catch (DuplicateTerminalKeyException exe) {
+      exe = new DuplicateTerminalKeyException(Integer.toString(integerField("id")));
     }
   }
 }

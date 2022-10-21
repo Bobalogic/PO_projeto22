@@ -1,10 +1,7 @@
 package prr.core;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 //import prr.core.TerminalMode;
 //import prr.core.Communication;
@@ -12,15 +9,12 @@ import java.util.LinkedList;
 //import prr.core.Notification;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
-/**
- * Abstract terminal.
- */
-abstract public class Terminal implements Serializable /* FIXME maybe addd more interfaces */{
+public class Terminal implements Serializable /* FIXME maybe addd more interfaces */{
 
   /** Serial number for serialization. */
   private static final long serialVersionUID = 202208091753L;
   private String _id;
-  //private String _mode;
+  private String _type;
   private double _debt;
   private double _payments;
   private TerminalMode _mode;
@@ -35,8 +29,9 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
   // FIXME define contructor(s)
   // FIXME define methods
   
-  public Terminal(String id){
+  public Terminal(String id, String type){
     _id = id;
+    _type = type;
     _debt = 0;
     _payments = 0;
     _mode = TerminalMode.IDLE;
@@ -52,6 +47,26 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
 
   public String getId() {
     return _id;
+  }
+
+  public String getType() {
+    return _type;
+  }
+
+  @Override
+  public String toString() {
+    return _type + "|" + _id + "|" + _client + "|" + _mode + "|" + _payments + "|"
+            + _debt + "|" + showFriends();
+  }
+
+  public String showFriends() {
+    String s = "";
+    List<Integer> idList = new ArrayList<Integer>();
+    for(Terminal t: _friends) {
+      idList.add(Integer.valueOf(t.getId()));
+    }
+    //idList.sort();
+    return s;
   }
 
   public boolean associateClient(Client c){
@@ -94,6 +109,10 @@ abstract public class Terminal implements Serializable /* FIXME maybe addd more 
   }
   public void makeVoiceCall(Terminal to){
     //FIXME completar a funcao
+  }
+
+  public void makeVideoCall() {
+    return;
   }
   public void endOnGoingCommunication(){
     if(canEndCurrentCommunication()){

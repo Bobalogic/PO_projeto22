@@ -60,6 +60,7 @@ public class Client {
         return _recieveNotifications;
     }
 
+    @Override
     public String toString(){
         return "CLIENT|" + _key + "|" + _name + "|" + _taxNumber + "|"
         + _level + "|" + stringNotifications() + "|" + _associatedTerminals.size() + "|"
