@@ -62,7 +62,7 @@ public class Network implements Serializable {
     return new ArrayList<Terminal>(_terminalSet.values());
   }
 
-  public Terminal registerTerminal(String id, String type) throws DuplicateTerminalKeyException{
+  public Terminal registerTerminal(String id, String type, ) throws DuplicateTerminalKeyException{
     if(_terminalSet.containsKey(id)) {
       throw new DuplicateTerminalKeyException(id);
     }

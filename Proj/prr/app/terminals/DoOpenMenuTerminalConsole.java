@@ -24,6 +24,6 @@ class DoOpenMenuTerminalConsole extends Command<Network> {
     // create an instance of prr.app.terminal.Menu with the
     // selected Terminal and open it
     Terminal terminal = _receiver.getTerminal(stringField("key"));
-    (new Menu(_receiver, terminal)).open();
+    (new prr.app.terminal.Menu(_receiver, terminal)).open();
   }
 }
