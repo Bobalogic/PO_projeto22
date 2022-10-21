@@ -1,8 +1,10 @@
 package prr.app.client;
 
 import prr.core.Network;
+import prr.core.Client;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
+
 //FIXME add more imports if needed
 
 /**
@@ -16,7 +18,8 @@ class DoShowAllClients extends Command<Network> {
   
   @Override
   protected final void execute() throws CommandException {
-    iterator it = iterator<Client>(_receiver.getAllClient());
-
+    for (Client client : _receiver.getAllClient()) {
+      _display.addLine(client.toString());
+    }
   }
 }
