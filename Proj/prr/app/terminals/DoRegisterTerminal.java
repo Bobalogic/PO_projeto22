@@ -17,17 +17,13 @@ class DoRegisterTerminal extends Command<Network> {
     super(Label.REGISTER_TERMINAL, receiver);
     addIntegerField("id", Message.terminalKey());
     addStringField("type", Message.terminalType());
-    while(stringField("type") != "FANCY" || stringField("type") != "NORMAL") {
+    while (stringField("type") != "FANCY" || stringField("type") != "NORMAL") {
       addStringField("type", Message.terminalType());
     }
   }
 
   @Override
   protected final void execute() throws CommandException {
-    try {
-      _receiver.registerTerminal(stringField("id"), stringField("type"));
-    }catch (DuplicateTerminalKeyException exe) {
-      exe = new DuplicateTerminalKeyException(Integer.toString(integerField("id")));
-    }
+    _receiver.registerTerminal(stringField("id"), stringField("type"));
   }
 }

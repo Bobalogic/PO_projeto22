@@ -20,6 +20,6 @@ class DoRegisterClient extends Command<Network> {
   
   @Override
   protected final void execute() throws CommandException {
-      _receiver.registerClient(stringField("key"), stringField("name"), integerField("taxNum"));
+    _receiver.registerClient(stringField("key"), stringField("name"), integerField("taxNum"));
   }
 }

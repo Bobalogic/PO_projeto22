@@ -23,12 +23,7 @@ class DoOpenMenuTerminalConsole extends Command<Network> {
     //FIXME implement command
     // create an instance of prr.app.terminal.Menu with the
     // selected Terminal and open it
-    Terminal terminal = null;
-    try {
-      terminal = _receiver.getTerminal(stringField("key"));
-    }catch(UnknownTerminalKeyException exe) {
-      exe = new UnknownTerminalKeyException(stringField("key"));
-    }
+    Terminal terminal = _receiver.getTerminal(stringField("key"));
     (new Menu(_receiver, terminal)).open();
   }
 }
