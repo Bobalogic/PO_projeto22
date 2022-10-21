@@ -14,7 +14,11 @@ Escolha uma opção: GESTÃO DE CLIENTES
 5 - Desactivar notificações
 6 - Mostrar saldo de cliente
 0 - Sair
-Escolha uma opção: GESTÃO DE CLIENTES
+Escolha uma opção: CLIENT|cli002|Pedro Pinheiro|103447|NORMAL|YES|0|0|0
+CLIENT|cli003|Pedro Oliveira|103449|NORMAL|YES|0|0|0
+CLIENT|cli201|Ludgero Oliveira|103440|NORMAL|YES|0|0|0
+CLIENT|abc001|Manuel Pinheiro|103443|NORMAL|YES|0|0|0
+GESTÃO DE CLIENTES
 1 - Visualizar cliente
 2 - Visualizar todos os clientes
 3 - Registar cliente

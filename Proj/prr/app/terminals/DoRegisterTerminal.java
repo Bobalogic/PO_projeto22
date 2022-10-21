@@ -6,6 +6,8 @@ import prr.app.exception.InvalidTerminalKeyException;
 import prr.app.exception.UnknownClientKeyException;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
+
+import java.lang.reflect.Type;
 //FIXME add more imports if needed
 
 /**
@@ -15,15 +17,14 @@ class DoRegisterTerminal extends Command<Network> {
 
   DoRegisterTerminal(Network receiver) {
     super(Label.REGISTER_TERMINAL, receiver);
-    addIntegerField("id", Message.terminalKey());
-    addStringField("type", Message.terminalType());
-    while (stringField("type") != "FANCY" || stringField("type") != "NORMAL") {
-      addStringField("type", Message.terminalType());
-    }
+    addStringField("id", Message.terminalKey());
+    addOptionField("type", Message.terminalType(), "BASIC", "FANCY");
+    addStringField("clientID", Message.clientKey());
   }
 
   @Override
   protected final void execute() throws CommandException {
-    _receiver.registerTerminal(stringField("id"), stringField("type"));
+    _receiver.registerTerminal(stringField("id"), stringField("type"), stringField("clientID"));
   }
 }
+

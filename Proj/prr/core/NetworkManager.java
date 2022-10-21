@@ -28,6 +28,7 @@ public class NetworkManager implements Serializable {
    *         an error while processing this file.
    */
   public void load(String filename) throws UnavailableFileException, ClassNotFoundException, IOException {
+    _filename = filename;
     try(ObjectInputStream InpObj = new ObjectInputStream(new FileInputStream(filename))){
       _network = (Network) InpObj.readObject();
     }
@@ -76,5 +77,9 @@ public class NetworkManager implements Serializable {
     } catch (IOException | UnrecognizedEntryException e) {
       throw new ImportFileException(filename, e);
     }
-  }  
+  }
+
+  public String get_filename() {
+    return _filename;
+  }
 }
