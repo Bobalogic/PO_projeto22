@@ -3,7 +3,7 @@ package prr.core;
 import java.io.Serializable;
 import java.util.*;
 
-public class Client implements Serializable {
+public class Client implements Serializable, ClientObserver {
     private static final long serialVersionUID = 202208091753L;
     private String _key;
     private String _name;
@@ -11,6 +11,7 @@ public class Client implements Serializable {
     private ClientLevel _level;
     private boolean _recieveNotifications;
     private Collection<Terminal> _associatedTerminals;
+    private Collection<Notification> _notificationList;
     private int _payments;
     private int _debts;
     //private TariffPlan
@@ -22,6 +23,7 @@ public class Client implements Serializable {
         _level = ClientLevel.NORMAL;
         _recieveNotifications = true;
         _associatedTerminals = new ArrayList<>();
+        _notificationList = new ArrayList<>();
     }
 
     public void associateTerminals(Terminal t){
@@ -65,6 +67,11 @@ public class Client implements Serializable {
         return _recieveNotifications;
     }
 
+    @Override
+    public void update(Notification n) {
+        if(_recieveNotifications)
+            _notificationList.add(n);
+    }
 
     @Override
     public String toString(){

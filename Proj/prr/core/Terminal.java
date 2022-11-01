@@ -24,7 +24,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   private Client _client;
   private Collection<Terminal> _friends;
   private Collection<Communication> _commMade;
-  private Collection<Terminal> _attemptedCommunications;
+  private Collection<Client> _attemptedCommunications;
 
   //construtor
   public Terminal(String id, String type, Client client){
@@ -141,7 +141,9 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
 
   public boolean setOnSilent(){
     if(_mode==TerminalMode.BUSY || _mode==TerminalMode.IDLE){
+      TerminalMode modeBefore = _mode;
       _mode = TerminalMode.SILENCE;
+      notifyObservers(getNotificationType(modeBefore, TerminalMode.IDLE));
       return true;
     }
     return false;
@@ -177,40 +179,31 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     return _friends.contains(t);
   }
 
-  /*
-   * sends a notification to the terminal's currespondent client
-   */
-  public void notificateClient(Notification n){
-    //FIXME later complete notifications
+  /**
+   * subscribes an observer to the attempted communications
+  * */
+  public void subscribeAttemptedComms (Client c) {
+    _attemptedCommunications.add(c);
   }
 
-  /*
-   * Notificates every Terminal that which attempted a communication
-   * and clears the _attemptedCommunications collection afterwards
-   */
-  public void manageNotifications(NotificationType nType){
-    Iterator<Terminal> it = _attemptedCommunications.iterator();
+  public Notification getNotificationType(TerminalMode before, TerminalMode after) {
+    if(before == TerminalMode.OFF && after == TerminalMode.IDLE)
+      return new Notification(NotificationType.O2I, this);
+    else if(before == TerminalMode.OFF && after == TerminalMode.SILENCE)
+      return new Notification(NotificationType.O2S, this);
+    else if(before == TerminalMode.BUSY && after == TerminalMode.IDLE)
+      return new Notification(NotificationType.B2I, this);
+    else//1(before == TerminalMode.BUSY && after == TerminalMode.SILENCE)
+      return new Notification(NotificationType.B2S, this);
+  }
 
-    while(it.hasNext()){
-      it.next();
-      //it.notificateClient();
+  /**
+   * Notificates all the subscriber in the list and resets it after
+  * */
+  public void notifyObservers(Notification n) {
+    for(Client c: _attemptedCommunications) {
+      c.update(n);
     }
     _attemptedCommunications.clear();
   }
-
-  /*
-   * regists the terminal which tried to start a communication with this Terminal
-
-  public void registAttemptedComm(Terminal from){
-    if(from.canNotificateClient()){
-      _attemptedCommunications.add(from);
-    }
-  }
-
-
-   * checks if client has enabled Notifications
-
-  public boolean canNotificateClient(){
-    return _client.booleanNotifications();
-  }*/
 }
