@@ -23,7 +23,7 @@ class DoRegisterTerminal extends Command<Network> {
   }
 
   @Override
-  protected final void execute() throws CommandException {
+  protected final void execute() throws CommandException,UnknownClientKeyException {
     _receiver.registerTerminal(stringField("id"), stringField("type"), stringField("clientID"));
   }
 }

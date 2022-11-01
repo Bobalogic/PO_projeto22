@@ -2,6 +2,7 @@ package prr.core;
 
 import java.io.*;
 
+import prr.app.exception.UnknownClientKeyException;
 import prr.core.exception.ImportFileException;
 import prr.core.exception.MissingFileAssociationException;
 import prr.core.exception.UnavailableFileException;
@@ -15,7 +16,7 @@ public class NetworkManager implements Serializable {
 
   /** The network itself. */
   private Network _network = new Network();
-  private String _filename = "";
+  private String _filename = null;
 
   public Network getNetwork() {
     return _network;
@@ -28,9 +29,9 @@ public class NetworkManager implements Serializable {
    *         an error while processing this file.
    */
   public void load(String filename) throws UnavailableFileException, ClassNotFoundException, IOException {
-    _filename = filename;
     try(ObjectInputStream InpObj = new ObjectInputStream(new FileInputStream(filename))){
       _network = (Network) InpObj.readObject();
+      _filename = filename;
     }
     catch (ClassNotFoundException | IOException cnf){
       throw new UnavailableFileException(filename);
@@ -71,7 +72,7 @@ public class NetworkManager implements Serializable {
    * @param filename name of the text input file
    * @throws ImportFileException
    */
-  public void importFile(String filename) throws ImportFileException {
+  public void importFile(String filename) throws ImportFileException, UnknownClientKeyException {
     try {
       _network.importFile(filename);
     } catch (IOException | UnrecognizedEntryException e) {

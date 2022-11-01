@@ -1,5 +1,6 @@
 package prr.app.main;
 
+import prr.app.exception.FileOpenFailedException;
 import prr.core.NetworkManager;
 import prr.core.exception.MissingFileAssociationException;
 import pt.tecnico.uilib.forms.Form;
@@ -18,23 +19,25 @@ class DoSaveFile extends Command<NetworkManager> {
   }
   
   @Override
-  protected final void execute() {
+  protected final void execute() throws FileOpenFailedException {
+    Form fileName = new Form();
     if (_receiver.get_filename() == null) {
+      fileName.addStringField("saveAs", Message.newSaveAs());
+      fileName.parse();
       try {
-
-        _receiver.saveAs(_receiver.get_filename());
+        _receiver.saveAs(fileName.stringField("saveAs"));
       } catch (MissingFileAssociationException e) {
-        throw new RuntimeException(e);
+        throw new FileOpenFailedException(e);
       } catch (IOException e) {
-        throw new RuntimeException(e);
+        throw new FileOpenFailedException(e);
       }
     }else {
       try {
         _receiver.save();
       } catch (MissingFileAssociationException e) {
-        throw new RuntimeException(e);
+        throw new FileOpenFailedException(e);
       } catch (IOException e) {
-        throw new RuntimeException(e);
+        throw new FileOpenFailedException(e);
       }
     }
   }

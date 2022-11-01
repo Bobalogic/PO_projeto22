@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import prr.app.exception.DuplicateClientKeyException;
 import prr.app.exception.DuplicateTerminalKeyException;
+import prr.app.exception.UnknownClientKeyException;
 import prr.app.exception.UnknownTerminalKeyException;
 import prr.core.exception.UnrecognizedEntryException;
 // import more exception core classes if needed (UnknownIdentifierException)
@@ -30,7 +31,7 @@ public class Parser {
     _network = network;
   }
 
-  void parseFile(String filename) throws IOException, UnrecognizedEntryException {
+  void parseFile(String filename) throws IOException, UnrecognizedEntryException, UnknownClientKeyException {
     try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
       String line;
       
@@ -39,7 +40,7 @@ public class Parser {
     }
   }
   
-  private void parseLine(String line) throws UnrecognizedEntryException {
+  private void parseLine(String line) throws UnrecognizedEntryException, UnknownClientKeyException {
     String[] components = line.split("\\|");
 
     switch(components[0]) {
@@ -70,11 +71,12 @@ public class Parser {
   }
 
   // parse a line with format terminal-type|idTerminal|idClient|state
-  private void parseTerminal(String[] components, String line) throws UnrecognizedEntryException {
+  private void parseTerminal(String[] components, String line) throws UnrecognizedEntryException,
+          UnknownClientKeyException {
     checkComponentsLength(components, 4, line);
 
     try {
-      Terminal terminal = _network.registerTerminal(components[0], components[1], components[2]);
+      Terminal terminal = _network.registerTerminal(components[1], components[0], components[2]);
       switch(components[3]) {
         case "SILENCE" -> terminal.setOnSilent();
         case "OFF" -> terminal.turnOff();

@@ -1,15 +1,16 @@
 package prr.core;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
-public class Client {
+public class Client implements Serializable {
+    private static final long serialVersionUID = 202208091753L;
     private String _key;
     private String _name;
     private int _taxNumber;
     private ClientLevel _level;
     private boolean _recieveNotifications;
-    private Set<Terminal> _associatedTerminals;
+    private Collection<Terminal> _associatedTerminals;
     private int _payments;
     private int _debts;
     //private TariffPlan
@@ -20,7 +21,11 @@ public class Client {
         _taxNumber = taxNumber;
         _level = ClientLevel.NORMAL;
         _recieveNotifications = true;
-        _associatedTerminals = new HashSet<>();
+        _associatedTerminals = new ArrayList<>();
+    }
+
+    public void associateTerminals(Terminal t){
+        _associatedTerminals.add(t);
     }
 
     public boolean booleanNotifications(){
@@ -59,6 +64,7 @@ public class Client {
     public boolean getReceiveNotifications(){
         return _recieveNotifications;
     }
+
 
     @Override
     public String toString(){

@@ -39,8 +39,10 @@ public class Network implements Serializable {
     return client.toString();
   }
 
-  public Collection<Client> getAllClient() {
-        return new ArrayList<Client>(_clientSet.values());
+  public Collection<Client> showAllClient() {
+    ArrayList<Client> cl = new ArrayList<>(_clientSet.values());
+    Collections.sort(cl, new ClientComparator());
+    return cl;
   }
 
   public void registerClient(String key, String name, int taxNum) throws DuplicateClientKeyException {
@@ -59,15 +61,30 @@ public class Network implements Serializable {
   }
 
   public Collection<Terminal> getAllTerminal() {
-    return new ArrayList<Terminal>(_terminalSet.values());
+    ArrayList<Terminal> tl = new ArrayList<>(_terminalSet.values());
+    Collections.sort(tl, new TerminalComparator());
+    return tl;
   }
 
-  public Terminal registerTerminal(String id, String type, String idClient) throws DuplicateTerminalKeyException{
+  public Collection<Terminal> getAllUnusedTerminal() {
+    ArrayList<Terminal> tl = new ArrayList<>(_terminalSet.values());
+    for(Terminal t: tl) {
+      if(!t.isUnused())
+        tl.remove(t);
+    }
+    Collections.sort(tl, new TerminalComparator());
+    return tl;
+  }
+
+  public Terminal registerTerminal(String id, String type, String clientID) throws
+          DuplicateTerminalKeyException,UnknownClientKeyException{
     if(_terminalSet.containsKey(id)) {
       throw new DuplicateTerminalKeyException(id);
     }
-    Terminal terminal = new Terminal(id, type, idClient);
+    Client client = getClient(clientID);
+    Terminal terminal = new Terminal(id, type, client);
     _terminalSet.put(id, terminal);
+    client.associateTerminals(terminal);
     return terminal;
   }
 
@@ -75,7 +92,7 @@ public class Network implements Serializable {
     Terminal terminal = getTerminal(id1);
     Terminal friend = getTerminal(id2);
     if(!terminal.isFriendsWith(friend)){
-      terminal.makeFriend(friend);
+      terminal.addFriend(friend);
     }
   }
 
@@ -97,7 +114,6 @@ public class Network implements Serializable {
     return false;
   }
 
-
   /**
    * Read text input file and create corresponding domain entities.
    * 
@@ -105,7 +121,7 @@ public class Network implements Serializable {
    * @throws UnrecognizedEntryException if some entry is not correct
    * @throws IOException if there is an IO erro while processing the text file
    */
-  void importFile(String filename) throws UnrecognizedEntryException, IOException   {
+  void importFile(String filename) throws UnrecognizedEntryException, IOException, UnknownClientKeyException   {
     Parser _parser = new Parser(this);
     _parser.parseFile(filename);
   }

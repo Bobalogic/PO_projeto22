@@ -2,6 +2,7 @@ package prr.core;
 
 import java.io.Serializable;
 import java.util.*;
+import java.lang.Math;
 
 //import prr.core.TerminalMode;
 //import prr.core.Communication;
@@ -20,16 +21,13 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   private TerminalMode _mode;
   private Communication _from;
   private Communication _to;
-  private String _clientID;
+  private Client _client;
   private Collection<Terminal> _friends;
+  private Collection<Communication> _commMade;
   private Collection<Terminal> _attemptedCommunications;
-  //adicionar atributo client?
-  //private Terminal[] _friends;
-  // FIXME define attributes
-  // FIXME define contructor(s)
-  // FIXME define methods
-  
-  public Terminal(String id, String type, String idClient){
+
+  //construtor
+  public Terminal(String id, String type, Client client){
     _id = id;
     _type = type;
     _debt = 0;
@@ -37,9 +35,10 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     _mode = TerminalMode.IDLE;
     _from = null;
     _to = null;
-    _clientID = idClient;
-    _friends = new HashSet<>();
-    _attemptedCommunications = new LinkedList<>();
+    _client = client;
+    _friends = new ArrayList<>();
+    _commMade = new ArrayList<>();
+    _attemptedCommunications = new ArrayList<>();
   }
 
   public TerminalMode getMode(){
@@ -54,30 +53,42 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     return _type;
   }
 
-  @Override
-  public String toString() {
-    return _type + "|" + _id + "|" + _clientID + "|" + _mode + "|" + _payments + "|"
-            + _debt + "|" + showFriends();
+  public boolean isUnused() {
+    return _commMade.size()==0;
   }
 
+  @Override
+  public String toString() {
+    return _type + "|" + _id + "|" + _client.getKey() + "|" + _mode + "|" + (int)Math.round(_payments) + "|"
+            + (int)Math.round(_debt) + showFriends();
+  }
+
+  //not completed yet
   public String showFriends() {
-    String s = "";
-    List<Integer> idList = new ArrayList<Integer>();
-    for(Terminal t: _friends) {
-      idList.add(Integer.valueOf(t.getId()));
+    ArrayList<Terminal> fl = new ArrayList<>(_friends); //create a copy
+    Collections.sort(fl, new TerminalComparator());     //sort the copy by id
+
+
+    boolean flag = false; //flag to check if it is first friend in list in order to add either a "|" or a ","
+    String s = ""; //string to return;
+
+    for(Terminal t: fl) {
+      if(flag) {  //if its not the first element there will be added a "," to separate friends
+        s = s + ",";
+        s = s + t.getId();
+      }
+      else {      //if it is the first element there will be added a "|" to seperate friends
+        s = s + "|";
+        s = s + t.getId();
+        flag = true;
+      }
     }
-    //idList.sort();
     return s;
   }
 
-  /*public boolean associateClient(Client c){
-    //fazer exeptions para quando tem la um null, ou quando recebe um null
-    if(_client != null || c == null){
-      return false;
-    }
+  public void associateClient(Client c){
     _client = c;
-    return true;
-  }*/
+  }
 
   /**
    * Checks if this terminal can end the current interactive communication.
@@ -90,7 +101,6 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
       return true;
     }
     return false;
-    // FIXME add implementation code
   }
   
   /**
@@ -155,26 +165,8 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     return setOnIdle();
   }
 
-  public boolean makeFriend(Terminal other){//ADD exeption para se receber algo que nao um terminal ou maybe nao e preciso
-    if(_friends.contains(other)){
-      _friends.add(other); //prolly funciona
-      other.addFriend(this);
-      return true;
-    }
-    return false;
-  }
-
   public void addFriend(Terminal other){
     _friends.add(other);
-  }
-
-  public boolean disMakeFriend(Terminal other){
-    if(_friends.contains(other)){
-      _friends.remove(other);
-      other.removeFriend(this);
-      return true;
-    }
-    return false;
   }
 
   public void removeFriend(Terminal other){
@@ -182,12 +174,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   }
 
   public boolean isFriendsWith(Terminal t) {
-    for(Terminal friend: _friends) {
-      if(_id == friend.getId()) {
-        return true;
-      }
-    }
-    return false;
+    return _friends.contains(t);
   }
 
   /*

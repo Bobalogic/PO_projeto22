@@ -1,6 +1,0 @@
-##CHANGE LOG##
-
-prr.core.Terminal.java:
-    adicionados os atributos na class abstract de terminal seguindo o UML disponiblizado
-    porque é que serve o return de int endOnGoingCall
-    porque é que nao esta a dar para compilar Terminal.java

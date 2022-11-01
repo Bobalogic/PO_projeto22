@@ -1,5 +1,6 @@
 package prr.app;
 
+import prr.app.exception.UnknownClientKeyException;
 import prr.core.NetworkManager;
 import prr.core.exception.ImportFileException;
 import pt.tecnico.uilib.Dialog;
@@ -9,7 +10,7 @@ import pt.tecnico.uilib.Dialog;
  */
 public class App {
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws UnknownClientKeyException {
     try (var ui = Dialog.UI) {
       var receiver = new NetworkManager();
       
