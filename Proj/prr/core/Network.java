@@ -119,6 +119,8 @@ public class Network implements Serializable {
     return false;
   }
 
+
+
   /**
    * Read text input file and create corresponding domain entities.
    * 

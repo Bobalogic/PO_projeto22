@@ -3,8 +3,8 @@ package prr.core;
 public class InteractiveCommunication extends Communication {
     private int _duration;
 
-    public InteractiveCommunication(Terminal from, Terminal to) {
-        super(from, to);
+    public InteractiveCommunication(int id, Terminal from, Terminal to) {
+        super(id, from, to);
         _duration = -1;     //duration set to -1 in order to check if its has been changed already
     }
 

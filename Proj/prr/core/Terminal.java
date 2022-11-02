@@ -1,5 +1,7 @@
 package prr.core;
 
+import org.w3c.dom.Text;
+
 import java.io.Serializable;
 import java.util.*;
 import java.lang.Math;
@@ -18,13 +20,16 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   private String _type;
   private double _debt;
   private double _payments;
+  private boolean _isSilent;
   private TerminalMode _mode;
-  private Communication _from;
-  private Communication _to;
+  private Collection<Communication> _from;
+  private Collection<Communication> _to;
+  private Communication _ongoingCommunication;
   private Client _client;
   private Collection<Terminal> _friends;
   private Collection<Communication> _commMade;
-  private Collection<Client> _attemptedCommunications;
+  private Collection<Client> _attemptedTextCommunications;
+  private Collection<Client> _attemptedInteractiveCommunications;
 
   //construtor
   public Terminal(String id, String type, Client client){
@@ -32,13 +37,15 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     _type = type;
     _debt = 0;
     _payments = 0;
+    _isSilent = false;
     _mode = TerminalMode.IDLE;
-    _from = null;
-    _to = null;
+    _from = new ArrayList<>();
+    _to = new ArrayList<>();
     _client = client;
     _friends = new ArrayList<>();
     _commMade = new ArrayList<>();
-    _attemptedCommunications = new ArrayList<>();
+    _attemptedTextCommunications = new ArrayList<>();
+    _attemptedInteractiveCommunications = new ArrayList<>();
   }
 
   public TerminalMode getMode(){
@@ -55,6 +62,9 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
 
   public boolean isUnused() {
     return _commMade.size()==0;
+  }
+  public boolean isSilent() {
+    return _isSilent;
   }
 
   @Override
@@ -115,15 +125,40 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     return true;
   }
 
-  public void makeSMS(Terminal to, String message){
-    //FIXME completar a funcao
-  }
-  public void makeVoiceCall(Terminal to){
-    //FIXME completar a funcao
+  public TextCommunication sendTextCommunication(int id, Terminal to, String message) {
+    TextCommunication tc = new TextCommunication(id, this, to, message);
+    _ongoingCommunication = tc;
+    _from.add(tc);
+    to.recieveTextCommunication(tc);
+    return tc;
   }
 
-  public void makeVideoCall() {
-    return;
+  public void recieveTextCommunication(TextCommunication tc) {
+    _ongoingCommunication = tc;
+    _to.add(tc);
+  }
+  public InteractiveCommunication makeVoiceCall(int id, Terminal to) {
+    _mode = TerminalMode.BUSY;
+    InteractiveCommunication ic = new InteractiveCommunication(id, this, to);
+    _ongoingCommunication = ic;
+    _from.add(ic);
+    to.recieveInteractiveCommunication(ic);
+    return ic;
+  }
+
+  public InteractiveCommunication makeVideoCall(int id, Terminal to) {
+    _mode = TerminalMode.BUSY;
+    InteractiveCommunication ic = new InteractiveCommunication(id, this, to);
+    _ongoingCommunication = ic;
+    _from.add(ic);
+    to.recieveInteractiveCommunication(ic);
+    return ic;
+  }
+
+  public void recieveInteractiveCommunication(InteractiveCommunication ic) {
+    _mode = TerminalMode.BUSY;
+    _ongoingCommunication = ic;
+    _to.add(ic);
   }
   public void endOnGoingCommunication(){
     if(canEndCurrentCommunication()){
@@ -143,7 +178,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     if(_mode==TerminalMode.BUSY || _mode==TerminalMode.IDLE){
       TerminalMode modeBefore = _mode;
       _mode = TerminalMode.SILENCE;
-      notifyObservers(getNotificationType(modeBefore, TerminalMode.IDLE));
+      notifyObservers(getNotificationType(modeBefore, TerminalMode.SILENCE));
       return true;
     }
     return false;
@@ -155,7 +190,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
       return true;
     }
     else if(_mode==TerminalMode.BUSY){
-      return true;
+      return false;
     }
     return false;
   }
@@ -182,8 +217,12 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   /**
    * subscribes an observer to the attempted communications
   * */
-  public void subscribeAttemptedComms (Client c) {
-    _attemptedCommunications.add(c);
+  public void subscribeAttemptedInteractiveComms (Client c) {
+    _attemptedInteractiveCommunications.add(c);
+  }
+
+  public void subscribeAttemptedTextComms (Client c) {
+    _attemptedTextCommunications.add(c);
   }
 
   public Notification getNotificationType(TerminalMode before, TerminalMode after) {
@@ -193,17 +232,24 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
       return new Notification(NotificationType.O2S, this);
     else if(before == TerminalMode.BUSY && after == TerminalMode.IDLE)
       return new Notification(NotificationType.B2I, this);
-    else//1(before == TerminalMode.BUSY && after == TerminalMode.SILENCE)
-      return new Notification(NotificationType.B2S, this);
+    else//(before == TerminalMode.SILENT && after == TerminalMode.IDLE)
+      return new Notification(NotificationType.S2I, this);
   }
 
   /**
    * Notificates all the subscriber in the list and resets it after
   * */
   public void notifyObservers(Notification n) {
-    for(Client c: _attemptedCommunications) {
+    for(Client c: _attemptedInteractiveCommunications) {
       c.update(n);
     }
-    _attemptedCommunications.clear();
+    _attemptedInteractiveCommunications.clear();
+    notifyObserversTextComms(n);
+  }
+
+  public void notifyObserversTextComms(Notification n) {
+    for(Client c: _attemptedTextCommunications) {
+
+    }
   }
 }

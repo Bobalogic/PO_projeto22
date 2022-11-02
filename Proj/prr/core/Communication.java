@@ -7,7 +7,8 @@ public abstract class Communication{
     private Terminal _to;
     private boolean _isOnGoing;
 
-    public Communication(Terminal from, Terminal to) {
+    public Communication(int id, Terminal from, Terminal to) {
+        _id = id;
         _from = from;
         _to = to;
         _cost = -1;
