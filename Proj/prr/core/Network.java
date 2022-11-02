@@ -91,9 +91,17 @@ public class Network implements Serializable {
   public void addFriend(String id1, String id2) throws UnknownTerminalKeyException {
     Terminal terminal = getTerminal(id1);
     Terminal friend = getTerminal(id2);
-    if(!terminal.isFriendsWith(friend)){
+
+    if(!terminal.isFriendsWith(friend) && terminal != friend)
       terminal.addFriend(friend);
-    }
+  }
+
+  public void removeFriend(String id1, String id2) throws UnknownTerminalKeyException {
+    Terminal terminal = getTerminal(id1);
+    Terminal friend = getTerminal(id2);
+
+    if(terminal.isFriendsWith(friend))
+      terminal.removeFriend(friend);
   }
 
   public String showTerminal(Terminal t) {
@@ -101,10 +109,7 @@ public class Network implements Serializable {
   }
 
   public boolean turnOffTerminal(Terminal terminal){
-    if(terminal.turnOff()){
-      return true;
-    }
-    return false;
+    return terminal.turnOff();
   }
 
   public boolean turnONTerminal(Terminal terminal){
