@@ -8,7 +8,7 @@ public class Client implements Serializable, ClientObserver {
     private String _key;
     private String _name;
     private int _taxNumber;
-    private ClientLevel _level;
+    private ClientLevelState _level;
     private boolean _recieveNotifications;
     private Collection<Terminal> _associatedTerminals;
     private Collection<Notification> _notificationList;
@@ -20,7 +20,7 @@ public class Client implements Serializable, ClientObserver {
         _key = key;
         _name = name;
         _taxNumber = taxNumber;
-        _level = ClientLevel.NORMAL;
+        _level = ClientLevelNormalState.getClientLevelState();
         _recieveNotifications = true;
         _associatedTerminals = new ArrayList<>();
         _notificationList = new ArrayList<>();
@@ -59,8 +59,8 @@ public class Client implements Serializable, ClientObserver {
         return _taxNumber;
     }
 
-    public ClientLevel getClientLevel(){
-        return _level;
+    public String getClientLevel(){
+        return _level.toString();
     }
 
     public Collection<Notification> getNotifications() {
