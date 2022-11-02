@@ -8,4 +8,8 @@ public class Notification {
         _type = type;
         _to = to;
     }
+
+    public String toString() {
+        return _type + "|" + _to.getId();
+    }
 }

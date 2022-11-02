@@ -63,7 +63,11 @@ public class Client implements Serializable, ClientObserver {
         return _level;
     }
 
-    public boolean getReceiveNotifications(){
+    public Collection<Notification> getNotifications() {
+        return Collections.unmodifiableCollection(_notificationList);
+    }
+
+    public boolean isNotificationsEnabled(){
         return _recieveNotifications;
     }
 
