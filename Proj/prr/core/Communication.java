@@ -13,6 +13,10 @@ public abstract class Communication{
         _to = to;
         _cost = -1;
     }
+
+    public Terminal getTerminalTo() {
+        return _to;
+    }
     public void updateCost(int newCost) {
         if(_cost == -1)
             _cost = newCost;

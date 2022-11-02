@@ -137,18 +137,9 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     _ongoingCommunication = tc;
     _to.add(tc);
   }
-  public InteractiveCommunication makeVoiceCall(int id, Terminal to) {
+  public InteractiveCommunication makeInteractiveCommunication(int id, Terminal to, String type) {
     _mode = TerminalMode.BUSY;
-    InteractiveCommunication ic = new InteractiveCommunication(id, this, to);
-    _ongoingCommunication = ic;
-    _from.add(ic);
-    to.recieveInteractiveCommunication(ic);
-    return ic;
-  }
-
-  public InteractiveCommunication makeVideoCall(int id, Terminal to) {
-    _mode = TerminalMode.BUSY;
-    InteractiveCommunication ic = new InteractiveCommunication(id, this, to);
+    InteractiveCommunication ic = new InteractiveCommunication(id, this, to, type);
     _ongoingCommunication = ic;
     _from.add(ic);
     to.recieveInteractiveCommunication(ic);
@@ -160,10 +151,18 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     _ongoingCommunication = ic;
     _to.add(ic);
   }
-  public void endOnGoingCommunication(){
-    if(canEndCurrentCommunication()){
-      //FIXME acabar a funcao de modo que termine a comunicação e execute as funções associadas ao fim de uma comunicação (tal como determinar o preco por exemplo)
-    }
+
+  public void turnOffInteractiveCommunication() {
+    if(_isSilent)
+      _mode = TerminalMode.SILENCE;
+    else
+      _mode = TerminalMode.IDLE;
+    _ongoingCommunication.getTerminalTo().endInteractiveCommunication();
+    _ongoingCommunication = null;
+  }
+  public void endInteractiveCommunication() {
+    _mode = TerminalMode.IDLE;
+    _ongoingCommunication = null;
   }
 
   public boolean setOnIdle(){//ADD quando vai para idle ou silent deve resolver as notificacoes

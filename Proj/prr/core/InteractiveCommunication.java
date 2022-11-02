@@ -2,9 +2,11 @@ package prr.core;
 
 public class InteractiveCommunication extends Communication {
     private int _duration;
+    private String _type;
 
-    public InteractiveCommunication(int id, Terminal from, Terminal to) {
+    public InteractiveCommunication(int id, Terminal from, Terminal to, String type) {
         super(id, from, to);
+        _type = type;
         _duration = -1;     //duration set to -1 in order to check if its has been changed already
     }
 

@@ -1,7 +1,7 @@
 package prr.core;
 
 /**
- * implementation of design patter Singleton
+ * implementation of design pattern Singleton
  */
 public class ClientLevelGoldState implements ClientLevelState{
     private static ClientLevelGoldState _cls;
