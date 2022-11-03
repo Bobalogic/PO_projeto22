@@ -2,7 +2,7 @@ package prr.core;
 
 public abstract class Communication{
     private int _id;
-    private float _cost;
+    private long _cost;
     private Terminal _from;
     private Terminal _to;
     private boolean _isOnGoing;
@@ -21,11 +21,26 @@ public abstract class Communication{
     public Terminal getTerminalTo() {
         return _to;
     }
-    public void updateCost(int newCost) {
+
+    public int getId() {
+        return _id;
+    }
+
+    public long getPrice() {
+        return _cost;
+    }
+
+    /**
+     *
+     * @param newCost
+     * @return the new cost or the old if it has been already changed
+     */
+    public long updateCost(int newCost) {
         if(_cost == -1) {
             if(_from.isFriendsWith(_to))
                 newCost /= 2;
             _cost = newCost;
         }
+        return _cost;
     }
 }

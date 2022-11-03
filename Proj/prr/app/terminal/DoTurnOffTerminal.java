@@ -20,10 +20,7 @@ class DoTurnOffTerminal extends TerminalCommand {
   
   @Override
   protected final void execute() throws CommandException {
-    if(!_context.turnOffTerminal(_terminal)){
-      _display.addLine(Message.alreadyOff());
-      _display.display();
-    }
-    //FIXME implement command
+    if(!_context.turnOffTerminal(_terminal))
+      _display.popup(Message.alreadyOff());
   }
 }

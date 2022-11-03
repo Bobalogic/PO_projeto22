@@ -21,9 +21,7 @@ class DoTurnOnTerminal extends TerminalCommand {
   @Override
   protected final void execute() throws CommandException {
     if(!_context.turnONTerminal(_terminal)){
-      _display.addLine(Message.alreadyOn());
-      _display.display();
+      _display.popup(Message.alreadyOn());
     }
-    //FIXME implement command
   }
 }

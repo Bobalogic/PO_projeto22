@@ -159,7 +159,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     _to.add(ic);
   }
 
-  public void turnOffInteractiveCommunication(int duration) {
+  public long turnOffInteractiveCommunication(int duration) {
     if(_isSilent) {
       notifyObservers(getNotificationType(_mode, TerminalMode.SILENCE));
       _mode = TerminalMode.SILENCE;
@@ -176,7 +176,9 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
 
     _ongoingCommunication.addDuration(duration);
     _ongoingCommunication.getTerminalTo().endInteractiveCommunication();
+    long Cost = _ongoingCommunication.updateCost(0);
     _ongoingCommunication = null;
+    return Cost;
   }
   public void endInteractiveCommunication() {
     notifyObservers(getNotificationType(_mode, TerminalMode.IDLE));
@@ -205,7 +207,6 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
 
   public boolean turnOff(){
     if(_mode==TerminalMode.IDLE || _mode==TerminalMode.SILENCE){
-      notifyObservers(getNotificationType(_mode, TerminalMode.OFF));
       _mode = TerminalMode.OFF;
       return true;
     }
@@ -219,7 +220,15 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     if(_mode != TerminalMode.OFF){
       return false;
     }
-    return setOnIdle();
+    if(_isSilent) {
+      notifyObserversTextComms(getNotificationType(_mode, TerminalMode.SILENCE));
+      _mode = TerminalMode.SILENCE;
+    }
+    else if(!_isSilent) {
+      notifyObservers(getNotificationType(_mode, TerminalMode.IDLE));
+      _mode = TerminalMode.IDLE;
+    }
+    return true;
   }
 
   public void addFriend(Terminal other){

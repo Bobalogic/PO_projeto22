@@ -11,4 +11,10 @@ public class TextCommunication extends Communication {
     public String getMessage() {
         return _message;
     }
+
+    public String toString() {
+        return "TEXT|" + super.getId() + "|" + super.getTerminalFrom().getId()
+                + "|" + super.getTerminalFrom().getId() + "|" + _message.length() + "|"
+                + super.getPrice() + "|" + "FINISHED";
+    }
 }

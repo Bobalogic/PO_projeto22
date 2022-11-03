@@ -37,11 +37,15 @@ public class Network implements Serializable {
     return temp;
   }
 
+  public String showTerminalCommunication(Terminal t) {
+    return t.toString();
+  }
+
   public String showClient(Client client) {
     return client.toString();
   }
 
-  public Collection<Client> showAllClient() {
+  public Collection<Client> getAllClient() {
     ArrayList<Client> cl = new ArrayList<>(_clientSet.values());
     Collections.sort(cl, new ClientComparator());
     return cl;
@@ -139,8 +143,8 @@ public class Network implements Serializable {
     _communicationSet.put(commNum, from.makeInteractiveCommunication(commNum, to, type));
   }
 
-  public void endInteractiveCommunication(Terminal t, int duration) {
-    t.turnOffInteractiveCommunication(duration);
+  public long endInteractiveCommunication(Terminal t, int duration) {
+    return t.turnOffInteractiveCommunication(duration);
   }
 
   public void attemptedTextComm(Terminal from, Terminal to) {
