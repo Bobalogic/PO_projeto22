@@ -18,8 +18,8 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   private static final long serialVersionUID = 202208091753L;
   private String _id;
   private String _type;
-  private double _debt;
-  private double _payments;
+  private long _debt;
+  private long _payments;
   private boolean _isSilent;
   private TerminalMode _mode;
   private Collection<Communication> _from;
@@ -64,8 +64,16 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     return _client;
   }
 
+  public long getPayments() {
+    return _payments;
+  }
+
+  public long getDebts() {
+    return _debt;
+  }
+
   public boolean isUnused() {
-    return _commMade.size()==0;
+    return _from.size()*_to.size() == 0;
   }
   public boolean isSilent() {
     return _isSilent;
@@ -81,7 +89,6 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     return _ongoingCommunication.toString();
   }
 
-  //not completed yet
   public String showFriends() {
     ArrayList<Terminal> fl = new ArrayList<>(_friends); //create a copy
     Collections.sort(fl, new TerminalComparator());     //sort the copy by id
@@ -91,7 +98,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     String s = ""; //string to return;
 
     for(Terminal t: fl) {
-      if(flag) {  //if its not the first element there will be added a "," to separate friends
+      if(flag) {  //if it is not the first element there will be added a "," to separate friends
         s = s + ",";
         s = s + t.getId();
       }
@@ -135,7 +142,9 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     TextCommunication tc = new TextCommunication(id, this, to, message);
     _from.add(tc);
     to.recieveTextCommunication(tc);
-    tc.updateCost(_client.getTextCommCost(message));
+    long debt = tc.updateCost(_client.getTextCommCost(message));
+    _debt += debt;
+    _client.updateDebt(debt);
     return tc;
   }
 
@@ -174,9 +183,10 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
 
     _ongoingCommunication.addDuration(duration);
     _ongoingCommunication.getTerminalTo().endInteractiveCommunication();
-    long Cost = _ongoingCommunication.updateCost(0);
+    long cost = _ongoingCommunication.updateCost(0);
+    _debt += cost;
     _ongoingCommunication = null;
-    return Cost;
+    return cost;
   }
   public void endInteractiveCommunication() {
     notifyObservers(getNotificationType(_mode, TerminalMode.IDLE));
@@ -250,6 +260,12 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
 
   public void subscribeAttemptedTextComms (Terminal t) {
     _attemptedTextCommunications.add(t);
+  }
+
+  public void pay(long cost) {
+    _payments += cost;
+    _debt -= cost;
+    _client.pay(cost);
   }
 
   public Notification getNotificationType(TerminalMode before, TerminalMode after) {

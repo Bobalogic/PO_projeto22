@@ -12,8 +12,8 @@ public class Client implements Serializable, ClientObserver {
     private boolean _recieveNotifications;
     private Collection<Terminal> _associatedTerminals;
     private Collection<Notification> _notificationList;
-    private int _payments;
-    private int _debts;
+    private long _payments;
+    private long _debts;
     //private TariffPlan
 
     public Client(String key, String name, int taxNumber){
@@ -81,6 +81,15 @@ public class Client implements Serializable, ClientObserver {
 
     public int getVideoCommCost(int duration) {
         return _level.calculateVideoCommCost(duration);
+    }
+
+    public void updateDebt(long cost) {
+        _debts += cost;
+    }
+
+    public void pay(long cost) {
+        _payments += cost;
+        _debts -= cost;
     }
 
     @Override

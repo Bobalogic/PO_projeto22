@@ -23,6 +23,8 @@ public class Network implements Serializable {
   private Map<String, Client> _clientSet;
   private Map<String, Terminal> _terminalSet;
   private Map<Integer, Communication> _communicationSet;
+  private long _payments;
+  private long _debts;
   
   public Network(){
     _clientSet = new HashMap<>();
@@ -35,6 +37,10 @@ public class Network implements Serializable {
     if (temp == null)
       throw new UnknownClientKeyException(key);
     return temp;
+  }
+
+  public Communication getCommunication(int id) {
+    return _communicationSet.get(id);
   }
 
   public Collection<Communication> getAllCommunication() {
@@ -131,15 +137,16 @@ public class Network implements Serializable {
     return terminal.turnOn();
   }
 
-  public boolean sendTextCommunication(Terminal from, Terminal to, String message) {
+  public void sendTextCommunication(Terminal from, Terminal to, String message) {
     if(to.getMode() == TerminalMode.OFF) {
-      return false;
+      return;
     }
     else if(from.canStartCommunication()) {
       int commNum = _communicationSet.size() + 1;
       _communicationSet.put(commNum, from.sendTextCommunication(commNum, to, message));
+      _debts += _communicationSet.get(commNum).getPrice();
     }
-    return true;
+
   }
 
   public TerminalMode getTerminalMode(Terminal t) {
@@ -153,10 +160,13 @@ public class Network implements Serializable {
   public void startInteractiveCommunication(Terminal from, Terminal to, String type) {
     int commNum = _communicationSet.size() + 1;
     _communicationSet.put(commNum, from.makeInteractiveCommunication(commNum, to, type));
+
   }
 
   public long endInteractiveCommunication(Terminal t, int duration) {
-    return t.turnOffInteractiveCommunication(duration);
+    long cost = t.turnOffInteractiveCommunication(duration);
+    _debts += cost;
+    return cost;
   }
 
   public void attemptedTextComm(Terminal from, Terminal to) {
@@ -167,6 +177,12 @@ public class Network implements Serializable {
   public void attemptedInteractiveComm(Terminal from, Terminal to) {
     if(from.getClient().receivesNotifications())
       to.subscribeAttemptedInteractiveComms(from);
+  }
+
+  public void performPayment(Communication c) {
+    long cost = c.pay();
+    _debts -= cost;
+    _payments += cost;
   }
 
   /**

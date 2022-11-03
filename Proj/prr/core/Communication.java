@@ -5,13 +5,14 @@ public abstract class Communication{
     private long _cost;
     private Terminal _from;
     private Terminal _to;
-    private boolean _isOnGoing;
+    private boolean _isPaid;
 
     public Communication(int id, Terminal from, Terminal to) {
         _id = id;
         _from = from;
         _to = to;
         _cost = -1;
+        _isPaid = false;
     }
 
     public Terminal getTerminalFrom() {
@@ -43,6 +44,16 @@ public abstract class Communication{
                 newCost /= 2;
             _cost = newCost;
         }
+        return _cost;
+    }
+
+    public boolean isPaid() {
+        return _isPaid;
+    }
+
+    public long pay() {
+        _isPaid = true;
+        _from.pay(_cost);
         return _cost;
     }
 }
