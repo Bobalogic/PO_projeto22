@@ -30,10 +30,6 @@ public class Client implements Serializable, ClientObserver {
         _associatedTerminals.add(t);
     }
 
-    public boolean booleanNotifications(){
-        return _recieveNotifications;
-    }
-
     public String stringNotifications(){
         if(_recieveNotifications){
             return "YES";
@@ -47,6 +43,10 @@ public class Client implements Serializable, ClientObserver {
 
     public void disableNotifications(){
         _recieveNotifications = false;
+    }
+
+    public boolean receivesNotifications() {
+        return _recieveNotifications;
     }
 
     public String getKey(){return _key;}
@@ -67,8 +67,8 @@ public class Client implements Serializable, ClientObserver {
         return Collections.unmodifiableCollection(_notificationList);
     }
 
-    public boolean isNotificationsEnabled(){
-        return _recieveNotifications;
+    public void clearNotifications() {
+        _notificationList.clear();
     }
 
     public int getTextCommCost(String message) {
@@ -85,8 +85,7 @@ public class Client implements Serializable, ClientObserver {
 
     @Override
     public void update(Notification n) {
-        if(_recieveNotifications)
-            _notificationList.add(n);
+        _notificationList.add(n);
     }
 
     @Override

@@ -67,6 +67,10 @@ public class Network implements Serializable {
     _clientSet.put(key, newClient);
   }
 
+  public void clearClientNotifications(Client c) {
+    c.clearNotifications();
+  }
+
   public Terminal getTerminal(String id) throws UnknownTerminalKeyException {
     Terminal temp = _terminalSet.get(id);
     if (temp == null)
@@ -156,12 +160,12 @@ public class Network implements Serializable {
   }
 
   public void attemptedTextComm(Terminal from, Terminal to) {
-    if(from.recievesNotifications())
-      to.subscribeAttemptedInteractiveComms(from);
+    if(from.getClient().receivesNotifications())
+      to.subscribeAttemptedTextComms(from);
   }
 
   public void attemptedInteractiveComm(Terminal from, Terminal to) {
-    if(from.recievesNotifications())
+    if(from.getClient().receivesNotifications())
       to.subscribeAttemptedInteractiveComms(from);
   }
 

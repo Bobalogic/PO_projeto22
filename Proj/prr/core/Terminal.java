@@ -21,7 +21,6 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   private double _debt;
   private double _payments;
   private boolean _isSilent;
-  private boolean _recievesNotifications;
   private TerminalMode _mode;
   private Collection<Communication> _from;
   private Collection<Communication> _to;
@@ -38,7 +37,6 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     _type = type;
     _debt = 0;
     _payments = 0;
-    _recievesNotifications = true;
     _isSilent = false;
     _mode = TerminalMode.IDLE;
     _from = new ArrayList<>();
@@ -68,10 +66,6 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
 
   public boolean isUnused() {
     return _commMade.size()==0;
-  }
-
-  public boolean recievesNotifications() {
-    return _recievesNotifications;
   }
   public boolean isSilent() {
     return _isSilent;
