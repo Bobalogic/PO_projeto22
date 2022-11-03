@@ -14,7 +14,7 @@ public class TextCommunication extends Communication {
 
     public String toString() {
         return "TEXT|" + super.getId() + "|" + super.getTerminalFrom().getId()
-                + "|" + super.getTerminalFrom().getId() + "|" + _message.length() + "|"
+                + "|" + super.getTerminalTo().getId() + "|" + _message.length() + "|"
                 + super.getPrice() + "|" + "FINISHED";
     }
 }

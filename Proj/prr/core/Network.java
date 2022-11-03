@@ -37,8 +37,16 @@ public class Network implements Serializable {
     return temp;
   }
 
+  public Collection<Communication> getAllCommunication() {
+    return _communicationSet.values();
+  }
+
+  public boolean isTerminalBusy(Terminal t) {
+    return t.getMode() == TerminalMode.BUSY;
+  }
+
   public String showTerminalCommunication(Terminal t) {
-    return t.toString();
+    return t.showOngoingCommunication();
   }
 
   public String showClient(Client client) {

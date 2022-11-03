@@ -83,6 +83,10 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
             + (int)Math.round(_debt) + showFriends();
   }
 
+  public String showOngoingCommunication() {
+    return _ongoingCommunication.toString();
+  }
+
   //not completed yet
   public String showFriends() {
     ArrayList<Terminal> fl = new ArrayList<>(_friends); //create a copy
@@ -168,7 +172,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
       notifyObservers(getNotificationType(_mode, TerminalMode.IDLE));
       _mode = TerminalMode.IDLE;
     }
-    switch (_type) {
+    switch (_ongoingCommunication.getType()) {
       case "VOICE" -> _ongoingCommunication.updateCost(_client.getVoiceCommCost(duration));
       case "VIDEO" -> _ongoingCommunication.updateCost(_client.getVideoCommCost(duration));
     }

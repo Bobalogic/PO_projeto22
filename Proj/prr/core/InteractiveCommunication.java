@@ -12,6 +12,10 @@ public class InteractiveCommunication extends Communication {
         _state = "ONGOING";
     }
 
+    public String getType() {
+        return _type;
+    }
+
     public int getDuration() {
         if(_duration == -1)
             return 0;
@@ -36,8 +40,8 @@ public class InteractiveCommunication extends Communication {
     public String toString() {
         if(_duration!=-1)
             _state = "FINISHED";
-        return "TEXT|" + super.getId() + "|" + super.getTerminalFrom().getId()
-                + "|" + super.getTerminalFrom().getId() + "|" + _duration + "|"
+        return _type + "|" + super.getId() + "|" + super.getTerminalFrom().getId()
+                + "|" + super.getTerminalTo().getId() + "|" + getDuration() + "|"
                 + super.getPrice() + "|" + _state;
     }
 }

@@ -16,6 +16,7 @@ class DoShowOngoingCommunication extends TerminalCommand {
   
   @Override
   protected final void execute() throws CommandException {
-    _display.popup(_network.showTerminalCommunication(_receiver));
+    if(_network.isTerminalBusy(_receiver))
+      _display.popup(_network.showTerminalCommunication(_receiver));
   }
 }

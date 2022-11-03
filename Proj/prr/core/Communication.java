@@ -27,6 +27,8 @@ public abstract class Communication{
     }
 
     public long getPrice() {
+        if(_cost == -1)
+            return 0;
         return _cost;
     }
 
