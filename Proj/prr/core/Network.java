@@ -70,10 +70,7 @@ public class Network implements Serializable {
 
   public Collection<Terminal> getAllUnusedTerminal() {
     ArrayList<Terminal> tl = new ArrayList<>(_terminalSet.values());
-    for(Terminal t: tl) {
-      if(!t.isUnused())
-        tl.remove(t);
-    }
+    tl.removeIf(t -> !t.isUnused());
     Collections.sort(tl, new TerminalComparator());
     return tl;
   }
@@ -115,10 +112,7 @@ public class Network implements Serializable {
   }
 
   public boolean turnONTerminal(Terminal terminal){
-    if(terminal.turnOn()){
-      return true;
-    }
-    return false;
+    return terminal.turnOn();
   }
 
   public boolean sendTextCommunication(Terminal from, Terminal to, String message) {

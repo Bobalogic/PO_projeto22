@@ -160,21 +160,26 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   }
 
   public void turnOffInteractiveCommunication(int duration) {
-    if(_isSilent)
+    if(_isSilent) {
+      notifyObservers(getNotificationType(_mode, TerminalMode.SILENCE));
       _mode = TerminalMode.SILENCE;
-    else
+    }
+    else {
+      notifyObservers(getNotificationType(_mode, TerminalMode.IDLE));
       _mode = TerminalMode.IDLE;
-
+    }
     switch (_type) {
       case "VOICE" -> _ongoingCommunication.updateCost(_client.getVoiceCommCost(duration));
       case "VIDEO" -> _ongoingCommunication.updateCost(_client.getVideoCommCost(duration));
     }
+
 
     _ongoingCommunication.addDuration(duration);
     _ongoingCommunication.getTerminalTo().endInteractiveCommunication();
     _ongoingCommunication = null;
   }
   public void endInteractiveCommunication() {
+    notifyObservers(getNotificationType(_mode, TerminalMode.IDLE));
     _mode = TerminalMode.IDLE;
     _ongoingCommunication = null;
   }
@@ -183,6 +188,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     if(_mode==TerminalMode.IDLE){
       return false;
     }
+    notifyObservers(getNotificationType(_mode, TerminalMode.IDLE));
     _mode = TerminalMode.IDLE;
     return true;
   }
@@ -199,6 +205,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
 
   public boolean turnOff(){
     if(_mode==TerminalMode.IDLE || _mode==TerminalMode.SILENCE){
+      notifyObservers(getNotificationType(_mode, TerminalMode.OFF));
       _mode = TerminalMode.OFF;
       return true;
     }
