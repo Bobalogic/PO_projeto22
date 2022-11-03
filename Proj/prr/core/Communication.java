@@ -14,6 +14,10 @@ public abstract class Communication{
         _cost = -1;
     }
 
+    public Terminal getTerminalFrom() {
+        return _from;
+    }
+
     public Terminal getTerminalTo() {
         return _to;
     }

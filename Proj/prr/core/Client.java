@@ -71,6 +71,18 @@ public class Client implements Serializable, ClientObserver {
         return _recieveNotifications;
     }
 
+    public int getTextCommCost(String message) {
+        return _level.calculateMessageCost(message);
+    }
+
+    public int getVoiceCommCost(int duration) {
+        return _level.calculateVoiceCommCost(duration);
+    }
+
+    public int getVideoCommCost(int duration) {
+        return _level.calculateVideoCommCost(duration);
+    }
+
     @Override
     public void update(Notification n) {
         if(_recieveNotifications)

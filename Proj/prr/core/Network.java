@@ -22,10 +22,12 @@ public class Network implements Serializable {
   private static final long serialVersionUID = 202208091753L;
   private Map<String, Client> _clientSet;
   private Map<String, Terminal> _terminalSet;
+  private Map<Integer, Communication> _communicationSet;
   
   public Network(){
-    _clientSet = new HashMap<String, Client>();
-    _terminalSet = new HashMap<String, Terminal>();
+    _clientSet = new HashMap<>();
+    _terminalSet = new HashMap<>();
+    _communicationSet = new HashMap<>();
   }
 
   public Client getClient(String key) throws UnknownClientKeyException{
@@ -119,7 +121,43 @@ public class Network implements Serializable {
     return false;
   }
 
+  public boolean sendTextCommunication(Terminal from, Terminal to, String message) {
+    if(to.getMode() == TerminalMode.OFF) {
+      return false;
+    }
+    else if(from.canStartCommunication()) {
+      int commNum = _communicationSet.size() + 1;
+      _communicationSet.put(commNum, from.sendTextCommunication(commNum, to, message));
+    }
+    return true;
+  }
 
+  public TerminalMode getTerminalMode(Terminal t) {
+    return t.getMode();
+  }
+
+  public boolean supportsVideoCommunication(Terminal t) {
+    return t.getType().equals("FANCY");
+  }
+
+  public void startInteractiveCommunication(Terminal from, Terminal to, String type) {
+    int commNum = _communicationSet.size() + 1;
+    _communicationSet.put(commNum, from.makeInteractiveCommunication(commNum, to, type));
+  }
+
+  public void endInteractiveCommunication(Terminal t, int duration) {
+    t.turnOffInteractiveCommunication(duration);
+  }
+
+  public void attemptedTextComm(Terminal from, Terminal to) {
+    if(from.recievesNotifications())
+      to.subscribeAttemptedInteractiveComms(from);
+  }
+
+  public void attemptedInteractiveComm(Terminal from, Terminal to) {
+    if(from.recievesNotifications())
+      to.subscribeAttemptedInteractiveComms(from);
+  }
 
   /**
    * Read text input file and create corresponding domain entities.
