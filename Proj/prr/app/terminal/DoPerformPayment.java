@@ -3,7 +3,6 @@ package prr.app.terminal;
 import prr.core.Network;
 import prr.core.Terminal;
 import pt.tecnico.uilib.menus.CommandException;
-// Add more imports if needed
 
 /**
  * Perform payment.
@@ -17,6 +16,7 @@ class DoPerformPayment extends TerminalCommand {
   
   @Override
   protected final void execute() throws CommandException {
-    _network.performPayment(_network.getCommunication(integerField("comm")));
+    if(!_network.performPayment(integerField("comm"), _receiver))
+      _display.popup(Message.invalidCommunication());
   }
 }

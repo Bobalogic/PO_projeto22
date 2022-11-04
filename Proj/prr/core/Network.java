@@ -109,6 +109,10 @@ public class Network implements Serializable {
     return terminal;
   }
 
+  public boolean silenceTerminal(Terminal t) {
+    return t.setOnSilent();
+  }
+
   public void addFriend(String id1, String id2) throws UnknownTerminalKeyException {
     Terminal terminal = getTerminal(id1);
     Terminal friend = getTerminal(id2);
@@ -179,10 +183,22 @@ public class Network implements Serializable {
       to.subscribeAttemptedInteractiveComms(from);
   }
 
-  public void performPayment(Communication c) {
-    long cost = c.pay();
-    _debts -= cost;
-    _payments += cost;
+  public boolean isCommFromTerminal(Communication c, Terminal t) {
+    return c.getTerminalFrom().equals(t);
+  }
+
+  public boolean performPayment(Integer commId, Terminal t) {
+    if(!_communicationSet.containsKey(commId))
+      return false;
+
+    Communication c = _communicationSet.get(commId);
+    if(isCommFromTerminal(c, t)) {
+      long cost = c.pay();
+      _debts -= cost;
+      _payments += cost;
+      return true;
+    }
+    return false;
   }
 
   /**

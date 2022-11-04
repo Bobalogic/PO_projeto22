@@ -204,13 +204,13 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   }
 
   public boolean setOnSilent(){
-    if(_mode==TerminalMode.BUSY || _mode==TerminalMode.IDLE){
-      TerminalMode modeBefore = _mode;
+    if(_mode==TerminalMode.IDLE){
+      _isSilent = true;
+      notifyObservers(getNotificationType(_mode, TerminalMode.SILENCE));
       _mode = TerminalMode.SILENCE;
-      notifyObservers(getNotificationType(modeBefore, TerminalMode.SILENCE));
       return true;
     }
-    return false;
+    return _mode.equals(TerminalMode.SILENCE);
   }
 
   public boolean turnOff(){
@@ -218,24 +218,18 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
       _mode = TerminalMode.OFF;
       return true;
     }
-    else if(_mode==TerminalMode.BUSY){
-      return false;
-    }
-    return false;
+    else return _mode == TerminalMode.BUSY;
   }
 
   public boolean turnOn(){
     if(_mode != TerminalMode.OFF){
       return false;
     }
-    if(_isSilent) {
-      notifyObserversTextComms(getNotificationType(_mode, TerminalMode.SILENCE));
-      _mode = TerminalMode.SILENCE;
-    }
-    else if(!_isSilent) {
-      notifyObservers(getNotificationType(_mode, TerminalMode.IDLE));
-      _mode = TerminalMode.IDLE;
-    }
+    else if(_isSilent)
+      _isSilent = false;
+
+    notifyObservers(getNotificationType(_mode, TerminalMode.IDLE));
+    _mode = TerminalMode.IDLE;
     return true;
   }
 
