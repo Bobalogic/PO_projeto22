@@ -65,6 +65,33 @@ public class Network implements Serializable {
     return cl;
   }
 
+  public boolean disableClientNotifications(String id) throws UnknownClientKeyException {
+    Client c = getClient(id);
+    if(c.receivesNotifications()) {
+      c.disableNotifications();
+      return true;
+    }
+    return false;
+  }
+
+  public boolean enableClientNotifications(String id) throws UnknownClientKeyException {
+    Client c = getClient(id);
+    if(c.receivesNotifications())
+      return false;
+    c.enableNotifications();
+    return true;
+  }
+
+  public long getClientPayments(String id) throws UnknownClientKeyException {
+    Client c = getClient(id);
+    return c.getPayments();
+  }
+
+  public long getClientDebts(String id) throws UnknownClientKeyException {
+    Client c = getClient(id);
+    return c.getDebts();
+  }
+
   public void registerClient(String key, String name, int taxNum) throws DuplicateClientKeyException {
     if(_clientSet.containsKey(key)){
       throw new DuplicateClientKeyException(key);

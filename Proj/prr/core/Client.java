@@ -41,7 +41,7 @@ public class Client implements Serializable, ClientObserver {
         _recieveNotifications = true;
     }
 
-    public void disableNotifications(){
+    public void disableNotifications() {
         _recieveNotifications = false;
     }
 
@@ -50,6 +50,14 @@ public class Client implements Serializable, ClientObserver {
     }
 
     public String getKey(){return _key;}
+
+    public long getPayments() {
+        return _payments;
+    }
+
+    public long getDebts() {
+        return _debts;
+    }
 
     public String getName(){
         return _name;
