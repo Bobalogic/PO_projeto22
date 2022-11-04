@@ -72,6 +72,18 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     return _debt;
   }
 
+  public long getBalance() {
+    return _payments - _debt;
+  }
+
+  public Collection<Communication> getCommunicationsFrom() {
+    return new ArrayList<>(_from);
+  }
+
+  public Collection<Communication> getCommunicationsTo() {
+    return new ArrayList<>(_to);
+  }
+
   public boolean isUnused() {
     return _from.size()*_to.size() == 0;
   }
@@ -194,7 +206,7 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     _ongoingCommunication = null;
   }
 
-  public boolean setOnIdle(){//ADD quando vai para idle ou silent deve resolver as notificacoes
+  public boolean setOnIdle(){
     if(_mode==TerminalMode.IDLE){
       return false;
     }
@@ -204,25 +216,30 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   }
 
   public boolean setOnSilent(){
-    if(_mode==TerminalMode.IDLE){
+    if(_mode == TerminalMode.SILENCE)
+      return false;
+    else if(_mode == TerminalMode.OFF) {
+      notifyObserversTextComms(getNotificationType(_mode, TerminalMode.SILENCE));
       _isSilent = true;
-      notifyObservers(getNotificationType(_mode, TerminalMode.SILENCE));
       _mode = TerminalMode.SILENCE;
-      return true;
     }
-    return _mode.equals(TerminalMode.SILENCE);
+    else if(_mode!=TerminalMode.BUSY) {
+      _isSilent = true;
+      _mode = TerminalMode.SILENCE;
+    }
+    return true;
   }
 
-  public boolean turnOff(){
-    if(_mode==TerminalMode.IDLE || _mode==TerminalMode.SILENCE){
+  public boolean turnOff() {
+    if(_mode!=TerminalMode.OFF && _mode!=TerminalMode.BUSY){
       _mode = TerminalMode.OFF;
       return true;
     }
     else return _mode == TerminalMode.BUSY;
   }
 
-  public boolean turnOn(){
-    if(_mode != TerminalMode.OFF){
+  public boolean turnOn() {
+    if(_mode == TerminalMode.IDLE) {
       return false;
     }
     else if(_isSilent)
@@ -249,11 +266,13 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
    * subscribes an observer to the attempted communications
   * */
   public void subscribeAttemptedInteractiveComms (Terminal t) {
-    _attemptedInteractiveCommunications.add(t);
+    if(!_attemptedInteractiveCommunications.contains(t))
+      _attemptedInteractiveCommunications.add(t);
   }
 
   public void subscribeAttemptedTextComms (Terminal t) {
-    _attemptedTextCommunications.add(t);
+    if(!_attemptedTextCommunications.contains(t))
+      _attemptedTextCommunications.add(t);
   }
 
   public void pay(long cost) {
@@ -288,5 +307,6 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     for(Terminal t: _attemptedTextCommunications) {
       t.getClient().update(n);
     }
+    _attemptedTextCommunications.clear();
   }
 }

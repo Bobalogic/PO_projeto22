@@ -71,6 +71,22 @@ public class Client implements Serializable, ClientObserver {
         return _level.toString();
     }
 
+    public ArrayList<Communication> getCommunicationsFrom() {
+        ArrayList<Communication> cf = new ArrayList<>();
+        for(Terminal t: _associatedTerminals) {
+            cf.addAll(t.getCommunicationsFrom());
+        }
+        return cf;
+    }
+
+    public ArrayList<Communication> getCommunicationsTo() {
+        ArrayList<Communication> cf = new ArrayList<>();
+        for(Terminal t: _associatedTerminals) {
+            cf.addAll(t.getCommunicationsTo());
+        }
+        return cf;
+    }
+
     public Collection<Notification> getNotifications() {
         return Collections.unmodifiableCollection(_notificationList);
     }
@@ -101,8 +117,12 @@ public class Client implements Serializable, ClientObserver {
     }
 
     @Override
-    public void update(Notification n) {
-        _notificationList.add(n);
+    public void update(Notification n1) {
+        for(Notification n2: _notificationList) {
+            if (n1.getTo().equals(n2.getTo()))
+                return;
+        }
+        _notificationList.add(n1);
     }
 
     @Override

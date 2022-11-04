@@ -21,8 +21,10 @@ class DoSendTextCommunication extends TerminalCommand {
   @Override
   protected final void execute() throws CommandException {
     Terminal to = _network.getTerminal(stringField("key"));
-    if(to.getMode()== TerminalMode.OFF)
+    if(to.getMode() == TerminalMode.OFF) {
       _display.popup(Message.destinationIsOff(stringField("key")));
+      to.subscribeAttemptedTextComms(_receiver);
+    }
     else if(_receiver.canStartCommunication()) {
       _network.sendTextCommunication(_receiver, to, stringField("Message"));
     }

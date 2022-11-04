@@ -32,11 +32,54 @@ public class Network implements Serializable {
     _communicationSet = new HashMap<>();
   }
 
+  public long getPayments() {
+    return _payments;
+  }
+
+  public long getDebts() {
+    return _debts;
+  }
+
   public Client getClient(String key) throws UnknownClientKeyException{
     Client temp = _clientSet.get(key);
     if (temp == null)
       throw new UnknownClientKeyException(key);
     return temp;
+  }
+
+  public Collection<Client> getClientsWithDebts() {
+    ArrayList<Client> clientList = new ArrayList<>(_clientSet.values());
+    clientList.removeIf(c -> c.getDebts() > 0);
+    Collections.sort(clientList, new ClientDebtComparator());
+    return clientList;
+  }
+
+  public Collection<Client> getClientsWithoutDebts() {
+    ArrayList<Client> clientList = new ArrayList<>(_clientSet.values());
+    clientList.removeIf(c -> c.getDebts() == 0);
+    Collections.sort(clientList, new ClientComparator());
+    return clientList;
+  }
+
+  public Collection<Communication> getClientCommunicationsFrom(String id) throws UnknownClientKeyException{
+    Client c = getClient(id);
+    ArrayList<Communication> comms = new ArrayList<>(c.getCommunicationsFrom());
+    Collections.sort(comms, new CommunicationComparator());
+    return comms;
+  }
+
+  public Collection<Communication> getClientCommunicationsTo(String id) throws UnknownClientKeyException{
+    Client c = getClient(id);
+    ArrayList<Communication> comms = new ArrayList<>(c.getCommunicationsTo());
+    Collections.sort(comms, new CommunicationComparator());
+    return comms;
+  }
+
+  public Collection<Terminal> getTerminalsWithPositiveBalance() {
+    ArrayList<Terminal> twpb = new ArrayList<>(_terminalSet.values());
+    twpb.removeIf(t -> t.getBalance() > 0);
+    Collections.sort(twpb, new TerminalComparator());
+    return twpb;
   }
 
   public Communication getCommunication(int id) {
