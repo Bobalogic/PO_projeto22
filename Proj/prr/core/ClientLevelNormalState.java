@@ -1,9 +1,13 @@
 package prr.core;
 
+import java.io.Serializable;
+
 /**
  * implementation of design patter Singleton
  */
-public class ClientLevelNormalState implements ClientLevelState{
+public class ClientLevelNormalState implements ClientLevelState, Serializable  {
+    /** Serial number for serialization. */
+    private static final long serialVersionUID = 202208091753L;
     private static ClientLevelNormalState _cls;
 
     private ClientLevelNormalState() {
