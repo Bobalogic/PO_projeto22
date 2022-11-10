@@ -1,0 +1,12 @@
+*** testsBoth/A-12-05-M-ok.out	2022-10-30 22:57:52.000000000 +0000
+--- testsBoth/A-12-05-M-ok.outhyp	2022-11-04 15:58:17.436214074 +0000
+***************
+*** 43,49 ****
+  11 - Mostrar comunicação em curso
+  0 - Sair
+  Escolha uma opção: 11
+- Não existe nenhuma comunicação em curso.
+  OPERAÇÕES DO TERMINAL
+  1 - Ligar
+  2 - Colocar no silêncio
+--- 43,48 ----

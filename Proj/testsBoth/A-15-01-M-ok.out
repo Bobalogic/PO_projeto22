@@ -1,0 +1,170 @@
+MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: 4
+GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: 3
+Número do terminal: 969001
+OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+8 - Enviar comunicação de texto
+9 - Iniciar comunicação
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: 8
+Número do terminal: 969006
+Mensagem de texto a enviar: 0123456789
+OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+8 - Enviar comunicação de texto
+9 - Iniciar comunicação
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: 0
+GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: 0
+MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: 5
+CONSULTAS
+1 - Mostrar todas as comunicações
+2 - Mostrar comunicações feitas por um cliente
+3 - Mostrar comunicações recebidas por um cliente
+4 - Mostrar clientes sem dívidas
+5 - Mostrar clientes com dívidas
+6 - Mostrar terminais sem actividade
+7 - Mostrar terminais com saldo positivo
+0 - Sair
+Escolha uma opção: 1
+TEXT|1|969001|969006|10|10|FINISHED
+CONSULTAS
+1 - Mostrar todas as comunicações
+2 - Mostrar comunicações feitas por um cliente
+3 - Mostrar comunicações recebidas por um cliente
+4 - Mostrar clientes sem dívidas
+5 - Mostrar clientes com dívidas
+6 - Mostrar terminais sem actividade
+7 - Mostrar terminais com saldo positivo
+0 - Sair
+Escolha uma opção: 0
+MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: 4
+GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: 3
+Número do terminal: 969011
+OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+8 - Enviar comunicação de texto
+9 - Iniciar comunicação
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: 8
+Número do terminal: 969001
+Mensagem de texto a enviar: 0123456789012345678901234567890123456789012345678
+OPERAÇÕES DO TERMINAL
+1 - Ligar
+2 - Colocar no silêncio
+3 - Desligar
+4 - Adicionar amigo
+5 - Retirar amigo
+6 - Pagamento
+7 - Consultar saldo
+8 - Enviar comunicação de texto
+9 - Iniciar comunicação
+11 - Mostrar comunicação em curso
+0 - Sair
+Escolha uma opção: 0
+GESTÃO DE TERMINAIS
+1 - Mostrar todos os terminais
+2 - Registar terminal
+3 - Operações de terminal
+0 - Sair
+Escolha uma opção: 0
+MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: 5
+CONSULTAS
+1 - Mostrar todas as comunicações
+2 - Mostrar comunicações feitas por um cliente
+3 - Mostrar comunicações recebidas por um cliente
+4 - Mostrar clientes sem dívidas
+5 - Mostrar clientes com dívidas
+6 - Mostrar terminais sem actividade
+7 - Mostrar terminais com saldo positivo
+0 - Sair
+Escolha uma opção: 1
+TEXT|1|969001|969006|10|10|FINISHED
+TEXT|2|969011|969001|49|10|FINISHED
+CONSULTAS
+1 - Mostrar todas as comunicações
+2 - Mostrar comunicações feitas por um cliente
+3 - Mostrar comunicações recebidas por um cliente
+4 - Mostrar clientes sem dívidas
+5 - Mostrar clientes com dívidas
+6 - Mostrar terminais sem actividade
+7 - Mostrar terminais com saldo positivo
+0 - Sair
+Escolha uma opção: 0
+MENU PRINCIPAL
+1 - Abrir
+2 - Guardar
+3 - Gestão de clientes
+4 - Gestão de terminais
+5 - Menu de consultas
+6 - Ver saldo global
+0 - Sair
+Escolha uma opção: 0
