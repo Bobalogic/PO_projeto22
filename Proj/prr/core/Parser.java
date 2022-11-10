@@ -57,7 +57,7 @@ public class Parser {
   }
   
   // parse a client with format CLIENT|id|nome|taxId
-  private void parseClient(String[] components, String line) throws UnrecognizedEntryException {
+  private void parseClient(String[] components, String line) throws UnrecognizedEntryException, UnknownClientKeyException {
     checkComponentsLength(components, 4, line);
 
     try {

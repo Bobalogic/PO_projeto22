@@ -13,7 +13,9 @@ public final class Menu extends pt.tecnico.uilib.menus.Menu {
           new DoShowAllClients(receiver), //
           new DoRegisterClient(receiver), //
           new DoEnableClientNotifications(receiver), //
-          new DoDisableClientNotifications(receiver), //
+          new DoDisableClientNotifications(receiver),
+          //new DoRemoveClients(receiver),
+          //new DoShowWorstClient(receiver),
           new DoShowClientPaymentsAndDebts(receiver));
   }
 }

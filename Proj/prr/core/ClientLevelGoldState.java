@@ -40,6 +40,10 @@ public class ClientLevelGoldState implements ClientLevelState, Serializable {
         return 20*duration;
     }
 
+    public ClientLevel getClientLevel() {
+        return ClientLevel.GOLD;
+    }
+
     public String toString() {
         return "GOLD";
     }

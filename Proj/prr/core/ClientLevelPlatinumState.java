@@ -40,6 +40,10 @@ public class ClientLevelPlatinumState implements ClientLevelState, Serializable 
         return 10*duration;
     }
 
+    public ClientLevel getClientLevel() {
+        return ClientLevel.PLATINUM;
+    }
+
     public String toString() {
         return "PLATINUM";
     }

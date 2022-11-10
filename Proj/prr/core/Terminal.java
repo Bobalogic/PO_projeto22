@@ -85,10 +85,14 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   }
 
   public boolean isUnused() {
-    return _from.size()*_to.size() == 0;
+    return _from.size()+_to.size() == 0;
   }
   public boolean isSilent() {
     return _isSilent;
+  }
+
+  public boolean isOngoing() {
+    return _ongoingCommunication != null;
   }
 
   @Override
@@ -152,11 +156,16 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
 
   public TextCommunication sendTextCommunication(int id, Terminal to, String message) {
     TextCommunication tc = new TextCommunication(id, this, to, message);
+
     _from.add(tc);
     to.recieveTextCommunication(tc);
     long debt = tc.updateCost(_client.getTextCommCost(message));
     _debt += debt;
     _client.updateDebt(debt);
+
+    _client.incTextCounter();
+    _client.verifyBalance();
+
     return tc;
   }
 
@@ -197,6 +206,15 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
     _ongoingCommunication.getTerminalTo().endInteractiveCommunication();
     long cost = _ongoingCommunication.updateCost(0);
     _debt += cost;
+    _client.updateDebt(cost);
+
+    if(_ongoingCommunication.getType().equals("VOICE"))
+      _client.incVoiceCounter();
+    else
+      _client.incVideoCounter();
+
+    _client.verifyBalance();
+
     _ongoingCommunication = null;
     return cost;
   }

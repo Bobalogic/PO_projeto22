@@ -8,5 +8,7 @@ public interface ClientLevelState{
     int calculateVoiceCommCost(int duration);
     int calculateVideoCommCost(int duration);
 
+    ClientLevel getClientLevel();
+
     String toString();
 }

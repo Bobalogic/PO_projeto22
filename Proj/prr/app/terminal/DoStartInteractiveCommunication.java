@@ -23,11 +23,11 @@ class DoStartInteractiveCommunication extends TerminalCommand {
   protected final void execute() throws CommandException {
     Terminal to = _network.getTerminal(stringField("key"));
     if(optionField("type").equals("VIDEO") && !_network.supportsVideoCommunication(_receiver)) {
-      _display.popup(Message.unsupportedAtOrigin(_receiver.getId(), _receiver.getType()));
+      _display.popup(Message.unsupportedAtOrigin(_receiver.getId(), stringField("type")));
       return;
     }
     else if(optionField("type").equals("VIDEO") && !_network.supportsVideoCommunication(to)) {
-      _display.popup(Message.unsupportedAtDestination(stringField("key"), to.getType()));
+      _display.popup(Message.unsupportedAtDestination(stringField("key"), stringField("type")));
       return;
     }
 

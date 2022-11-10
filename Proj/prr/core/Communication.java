@@ -1,6 +1,10 @@
 package prr.core;
 
-public abstract class Communication{
+import java.io.Serializable;
+
+public abstract class Communication implements Serializable {
+    /** Serial number for serialization. */
+    private static final long serialVersionUID = 202208091753L;
     private int _id;
     private long _cost;
     private Terminal _from;

@@ -14,6 +14,8 @@ public class Client implements Serializable, ClientObserver {
     private Collection<Notification> _notificationList;
     private long _payments;
     private long _debts;
+    private int _textCounter;
+    private int _videoCounter;
     //private TariffPlan
 
     public Client(String key, String name, int taxNumber){
@@ -71,6 +73,10 @@ public class Client implements Serializable, ClientObserver {
         return _level.toString();
     }
 
+    public int getNumTerminals() {
+        return _associatedTerminals.size();
+    }
+
     public ArrayList<Communication> getCommunicationsFrom() {
         ArrayList<Communication> cf = new ArrayList<>();
         for(Terminal t: _associatedTerminals) {
@@ -109,11 +115,15 @@ public class Client implements Serializable, ClientObserver {
 
     public void updateDebt(long cost) {
         _debts += cost;
+        if(_payments-_debts < 0)
+            _level = ClientLevelNormalState.getClientLevelState();
     }
 
     public void pay(long cost) {
         _payments += cost;
         _debts -= cost;
+        if(_payments-_debts > 500)
+            _level = ClientLevelGoldState.getClientLevelState();
     }
 
     @Override
@@ -123,6 +133,30 @@ public class Client implements Serializable, ClientObserver {
                 return;
         }
         _notificationList.add(n1);
+    }
+
+    public void incTextCounter() {
+        _textCounter += 1;
+        _videoCounter = 0;
+        if(_level.getClientLevel() == ClientLevel.PLATINUM && _textCounter >= 2)
+            _level = ClientLevelGoldState.getClientLevelState();
+    }
+
+    public void incVoiceCounter() {
+        _textCounter = 0;
+        _videoCounter = 0;
+    }
+
+    public void incVideoCounter() {
+        _textCounter = 0;
+        _videoCounter += 1;
+        if(_level.getClientLevel() == ClientLevel.GOLD && _videoCounter<=5)
+            _level = ClientLevelPlatinumState.getClientLevelState();
+    }
+
+    public void verifyBalance() {
+        if(_payments-_debts < 0)
+            _level = ClientLevelNormalState.getClientLevelState();
     }
 
     @Override

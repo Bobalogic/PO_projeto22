@@ -37,6 +37,10 @@ public class InteractiveCommunication extends Communication {
             return false;
     }
 
+    public boolean isOver() {
+        return _state.equals("FINISHED");
+    }
+
     public String toString() {
         if(_duration!=-1)
             _state = "FINISHED";

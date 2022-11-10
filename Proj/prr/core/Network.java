@@ -49,14 +49,14 @@ public class Network implements Serializable {
 
   public Collection<Client> getClientsWithDebts() {
     ArrayList<Client> clientList = new ArrayList<>(_clientSet.values());
-    clientList.removeIf(c -> c.getDebts() > 0);
+    clientList.removeIf(c -> c.getDebts() == 0);
     Collections.sort(clientList, new ClientDebtComparator());
     return clientList;
   }
 
   public Collection<Client> getClientsWithoutDebts() {
     ArrayList<Client> clientList = new ArrayList<>(_clientSet.values());
-    clientList.removeIf(c -> c.getDebts() == 0);
+    clientList.removeIf(c -> c.getDebts() > 0);
     Collections.sort(clientList, new ClientComparator());
     return clientList;
   }
@@ -77,7 +77,7 @@ public class Network implements Serializable {
 
   public Collection<Terminal> getTerminalsWithPositiveBalance() {
     ArrayList<Terminal> twpb = new ArrayList<>(_terminalSet.values());
-    twpb.removeIf(t -> t.getBalance() > 0);
+    twpb.removeIf(t -> t.getBalance() <= 0);
     Collections.sort(twpb, new TerminalComparator());
     return twpb;
   }
@@ -135,12 +135,18 @@ public class Network implements Serializable {
     return c.getDebts();
   }
 
-  public void registerClient(String key, String name, int taxNum) throws DuplicateClientKeyException {
+  public void registerClient(String key, String name, int taxNum) throws DuplicateClientKeyException, UnknownClientKeyException {
     if(_clientSet.containsKey(key)){
       throw new DuplicateClientKeyException(key);
     }
+    else if(key.length()>8)
+      throw new UnknownClientKeyException(key);
     Client newClient = new Client(key, name, taxNum);
     _clientSet.put(key, newClient);
+  }
+
+  public void removeClient(String key) {
+    _clientSet.remove(key);
   }
 
   public void clearClientNotifications(Client c) {
@@ -152,6 +158,21 @@ public class Network implements Serializable {
     if (temp == null)
       throw new UnknownTerminalKeyException(id);
     return temp;
+  }
+
+  public Client getWorstClient() {
+    ArrayList<Client> wc = new ArrayList<>(_clientSet.values());
+    Client worst = null;
+    for(Client c: wc) {
+      if(worst == null)
+        worst = c;
+      else if(c.getNumTerminals() == worst.getNumTerminals() && c.getKey().compareToIgnoreCase(worst.getKey()) > 0) {
+        worst = c;
+      }
+      else if(c.getNumTerminals() > worst.getNumTerminals())
+        worst = c;
+    }
+    return worst;
   }
 
   public Collection<Terminal> getAllTerminal() {
@@ -262,7 +283,9 @@ public class Network implements Serializable {
       return false;
 
     Communication c = _communicationSet.get(commId);
-    if(isCommFromTerminal(c, t)) {
+    if(c.isPaid() || !isCommFromTerminal(c, t))
+      return false;
+    else if(!t.isOngoing()) {
       long cost = c.pay();
       _debts -= cost;
       _payments += cost;

@@ -40,6 +40,10 @@ public class ClientLevelNormalState implements ClientLevelState, Serializable  {
         return 30*duration;
     }
 
+    public ClientLevel getClientLevel() {
+        return ClientLevel.NORMAL;
+    }
+
     public String toString() {
         return "NORMAL";
     }
