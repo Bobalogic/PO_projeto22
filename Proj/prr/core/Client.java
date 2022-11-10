@@ -150,7 +150,7 @@ public class Client implements Serializable, ClientObserver {
     public void incVideoCounter() {
         _textCounter = 0;
         _videoCounter += 1;
-        if(_level.getClientLevel() == ClientLevel.GOLD && _videoCounter<=5)
+        if(_level.getClientLevel() == ClientLevel.GOLD && _videoCounter>=5)
             _level = ClientLevelPlatinumState.getClientLevelState();
     }
 

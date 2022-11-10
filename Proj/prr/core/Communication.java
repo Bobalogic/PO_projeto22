@@ -51,6 +51,14 @@ public abstract class Communication implements Serializable {
         return _cost;
     }
 
+    /**
+     * only used to update cost when called by classes inherited
+     * @param newCost
+     */
+    public void changeCost(int newCost) {
+        _cost = newCost;
+    }
+
     public boolean isPaid() {
         return _isPaid;
     }

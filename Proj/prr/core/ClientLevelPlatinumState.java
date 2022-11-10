@@ -24,7 +24,7 @@ public class ClientLevelPlatinumState implements ClientLevelState, Serializable 
 
     public int calculateMessageCost(String message) {
         int MessageLenght = message.length();
-        if(MessageLenght < 10)
+        if(MessageLenght < 50)
             return 0;
         else if(MessageLenght >= 100)
             return 4;
