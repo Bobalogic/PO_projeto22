@@ -2,18 +2,12 @@ package prr.core;
 
 public class InteractiveCommunication extends Communication {
     private int _duration;
-    private String _type;
     private String _state;
 
     public InteractiveCommunication(int id, Terminal from, Terminal to, String type) {
-        super(id, from, to);
-        _type = type;
+        super(id, from, to, type);
         _duration = -1;     //duration set to -1 in order to check if its has been changed already
         _state = "ONGOING";
-    }
-
-    public String getType() {
-        return _type;
     }
 
     public int getDuration() {
@@ -44,7 +38,7 @@ public class InteractiveCommunication extends Communication {
     public String toString() {
         if(_duration!=-1)
             _state = "FINISHED";
-        return _type + "|" + super.getId() + "|" + super.getTerminalFrom().getId()
+        return getType() + "|" + super.getId() + "|" + super.getTerminalFrom().getId()
                 + "|" + super.getTerminalTo().getId() + "|" + getDuration() + "|"
                 + super.getPrice() + "|" + _state;
     }

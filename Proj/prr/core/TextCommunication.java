@@ -4,7 +4,7 @@ public class TextCommunication extends Communication {
     private String _message;
 
     public TextCommunication(int id, Terminal from, Terminal to, String message) {
-        super(id, from, to);
+        super(id, from, to, "TEXT");
         _message = message;
     }
 

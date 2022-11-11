@@ -188,10 +188,8 @@ public class Terminal implements Serializable /* FIXME maybe addd more interface
   }
 
   public long turnOffInteractiveCommunication(int duration) {
-    if(_isSilent) {
-      notifyObservers(getNotificationType(_mode, TerminalMode.SILENCE));
+    if(_isSilent)
       _mode = TerminalMode.SILENCE;
-    }
     else {
       notifyObservers(getNotificationType(_mode, TerminalMode.IDLE));
       _mode = TerminalMode.IDLE;

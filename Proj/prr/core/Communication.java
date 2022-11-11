@@ -1,6 +1,7 @@
 package prr.core;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public abstract class Communication implements Serializable {
     /** Serial number for serialization. */
@@ -10,13 +11,15 @@ public abstract class Communication implements Serializable {
     private Terminal _from;
     private Terminal _to;
     private boolean _isPaid;
+    private String _type;
 
-    public Communication(int id, Terminal from, Terminal to) {
+    public Communication(int id, Terminal from, Terminal to, String type) {
         _id = id;
         _from = from;
         _to = to;
         _cost = -1;
         _isPaid = false;
+        _type = type;
     }
 
     public Terminal getTerminalFrom() {
@@ -44,23 +47,19 @@ public abstract class Communication implements Serializable {
      */
     public long updateCost(int newCost) {
         if(_cost == -1) {
-            if(_from.isFriendsWith(_to))
+            if(_from.isFriendsWith(_to) && !getType().equals("TEXT"))
                 newCost /= 2;
             _cost = newCost;
         }
         return _cost;
     }
 
-    /**
-     * only used to update cost when called by classes inherited
-     * @param newCost
-     */
-    public void changeCost(int newCost) {
-        _cost = newCost;
-    }
-
     public boolean isPaid() {
         return _isPaid;
+    }
+
+    public String getType() {
+        return _type;
     }
 
     public long pay() {
